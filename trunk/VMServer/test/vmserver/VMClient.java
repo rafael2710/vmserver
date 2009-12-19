@@ -17,7 +17,7 @@ import org.apache.axis2.client.ServiceClient;
  * @author Rafael
  */
 
-public class Main {
+public class VMClient {
 
     private static EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
 
@@ -35,25 +35,30 @@ public class Main {
      */
     public static OMElement createVMPayload(String phyServer, String vmName, String vmIP, String vmRAM, String vmDiskSize) {
         OMFactory fac = OMAbstractFactory.getOMFactory();
-        OMNamespace omNs = fac.createOMNamespace("http://vmserver/xsd", "tns");
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace("http://vmserver/xsd", "vsm");
+        // Set the required operation
         OMElement method = fac.createOMElement("createVM", omNs);
+        
+        // Attributes
 
+        // Physical Server IP
         OMElement value = fac.createOMElement("phyServer", omNs);
         value.addChild(fac.createOMText(value, phyServer));
         method.addChild(value);
-
+        // Virtual Machine Name
         value = fac.createOMElement("vmName", omNs);
         value.addChild(fac.createOMText(value, vmName));
         method.addChild(value);
-
+        // Virtual Machine IP Address
         value = fac.createOMElement("vmIP", omNs);
         value.addChild(fac.createOMText(value, vmIP));
         method.addChild(value);
-
+        // Virtual Machine RAM Memory Size
         value = fac.createOMElement("vmRAM", omNs);
         value.addChild(fac.createOMText(value, vmRAM));
         method.addChild(value);
-
+        // Virtual Machine Hard Disk Size
         value = fac.createOMElement("vmDiskSize", omNs);
         value.addChild(fac.createOMText(value, vmDiskSize));
         method.addChild(value);

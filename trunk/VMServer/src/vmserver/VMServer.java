@@ -1,6 +1,5 @@
 package vmserver;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 import org.apache.axiom.om.OMAbstractFactory;
@@ -14,10 +13,18 @@ import org.apache.axiom.om.OMNamespace;
  */
 public class VMServer {
 
-    public String hello(String name) {
-        return "Hello "+name;
-    }
+ //   public String hello(String name) {
+ //       return "Hello "+name;
+ //   }
 
+    /**
+     * This method creates a virtual machine and instiate it on a physical server
+     * of the network. All relevants informations are passed inside the OMElement
+     * parameter received by the method.
+     *
+     * @param element
+     * @return an OMElement with the results of the operation
+     */
     public OMElement createVM(OMElement element){
         element.build();
         element.detach();
@@ -29,13 +36,11 @@ public class VMServer {
         String returnText = "Virtual Machine created\nAttributes:\n";
         while(it.hasNext()){
             ele.add((OMElement) it.next());
- //           System.err.println("DEBUG 4.1: "+ele.lastElement().toString());
- //           System.err.println("DEBUG 4.2: "+ele.lastElement().getLocalName());
             returnText = returnText+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
         }
 
         OMFactory fac = OMAbstractFactory.getOMFactory();
-        OMNamespace omNs = fac.createOMNamespace("http://vmserver/xsd", "tns");
+        OMNamespace omNs = fac.createOMNamespace("http://vmserver/xsd", "vsm");
         OMElement method = fac.createOMElement("createVMResponse", omNs);
         method.addChild(fac.createOMText(returnText)); 
 
