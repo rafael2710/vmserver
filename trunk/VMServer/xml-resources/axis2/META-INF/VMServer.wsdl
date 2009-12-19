@@ -2,34 +2,6 @@
 <wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:axis2="http://vmserver/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://vmserver/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://vmserver/">
     <wsdl:types>
         <xs:schema xmlns:ns="http://vmserver/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://vmserver/xsd">
-            <xs:element name="hello">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="helloResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="VMStatus">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="VMStatusResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
             <xs:element name="createVM">
                 <xs:complexType>
                     <xs:sequence>
@@ -72,6 +44,34 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="getPhyStatus">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getPhyStatusResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getVMStatus">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getVMStatusResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="migrateVM">
                 <xs:complexType>
                     <xs:sequence>
@@ -80,20 +80,6 @@
                 </xs:complexType>
             </xs:element>
             <xs:element name="migrateVMResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="phyStatus">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="phyStatusResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
@@ -130,29 +116,17 @@
             </xs:element>
         </xs:schema>
     </wsdl:types>
-    <wsdl:message name="helloRequest">
-        <wsdl:part name="parameters" element="ns0:hello"/>
-    </wsdl:message>
-    <wsdl:message name="helloResponse">
-        <wsdl:part name="parameters" element="ns0:helloResponse"/>
-    </wsdl:message>
-    <wsdl:message name="phyStatusRequest">
-        <wsdl:part name="parameters" element="ns0:phyStatus"/>
-    </wsdl:message>
-    <wsdl:message name="phyStatusResponse">
-        <wsdl:part name="parameters" element="ns0:phyStatusResponse"/>
-    </wsdl:message>
     <wsdl:message name="createVNetRequest">
         <wsdl:part name="parameters" element="ns0:createVNet"/>
     </wsdl:message>
     <wsdl:message name="createVNetResponse">
         <wsdl:part name="parameters" element="ns0:createVNetResponse"/>
     </wsdl:message>
-    <wsdl:message name="VMStatusRequest">
-        <wsdl:part name="parameters" element="ns0:VMStatus"/>
+    <wsdl:message name="getVMStatusRequest">
+        <wsdl:part name="parameters" element="ns0:getVMStatus"/>
     </wsdl:message>
-    <wsdl:message name="VMStatusResponse">
-        <wsdl:part name="parameters" element="ns0:VMStatusResponse"/>
+    <wsdl:message name="getVMStatusResponse">
+        <wsdl:part name="parameters" element="ns0:getVMStatusResponse"/>
     </wsdl:message>
     <wsdl:message name="shutdownVMRequest">
         <wsdl:part name="parameters" element="ns0:shutdownVM"/>
@@ -165,6 +139,12 @@
     </wsdl:message>
     <wsdl:message name="destroyVMResponse">
         <wsdl:part name="parameters" element="ns0:destroyVMResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getPhyStatusRequest">
+        <wsdl:part name="parameters" element="ns0:getPhyStatus"/>
+    </wsdl:message>
+    <wsdl:message name="getPhyStatusResponse">
+        <wsdl:part name="parameters" element="ns0:getPhyStatusResponse"/>
     </wsdl:message>
     <wsdl:message name="createVMRequest">
         <wsdl:part name="parameters" element="ns0:createVM"/>
@@ -185,21 +165,13 @@
         <wsdl:part name="parameters" element="ns0:shutdownPhyServerResponse"/>
     </wsdl:message>
     <wsdl:portType name="VMServerPortType">
-        <wsdl:operation name="hello">
-            <wsdl:input message="axis2:helloRequest" wsaw:Action="urn:hello"/>
-            <wsdl:output message="axis2:helloResponse" wsaw:Action="urn:helloResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="phyStatus">
-            <wsdl:input message="axis2:phyStatusRequest" wsaw:Action="urn:phyStatus"/>
-            <wsdl:output message="axis2:phyStatusResponse" wsaw:Action="urn:phyStatusResponse"/>
-        </wsdl:operation>
         <wsdl:operation name="createVNet">
             <wsdl:input message="axis2:createVNetRequest" wsaw:Action="urn:createVNet"/>
             <wsdl:output message="axis2:createVNetResponse" wsaw:Action="urn:createVNetResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="VMStatus">
-            <wsdl:input message="axis2:VMStatusRequest" wsaw:Action="urn:VMStatus"/>
-            <wsdl:output message="axis2:VMStatusResponse" wsaw:Action="urn:VMStatusResponse"/>
+        <wsdl:operation name="getVMStatus">
+            <wsdl:input message="axis2:getVMStatusRequest" wsaw:Action="urn:getVMStatus"/>
+            <wsdl:output message="axis2:getVMStatusResponse" wsaw:Action="urn:getVMStatusResponse"/>
         </wsdl:operation>
         <wsdl:operation name="shutdownVM">
             <wsdl:input message="axis2:shutdownVMRequest" wsaw:Action="urn:shutdownVM"/>
@@ -208,6 +180,10 @@
         <wsdl:operation name="destroyVM">
             <wsdl:input message="axis2:destroyVMRequest" wsaw:Action="urn:destroyVM"/>
             <wsdl:output message="axis2:destroyVMResponse" wsaw:Action="urn:destroyVMResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getPhyStatus">
+            <wsdl:input message="axis2:getPhyStatusRequest" wsaw:Action="urn:getPhyStatus"/>
+            <wsdl:output message="axis2:getPhyStatusResponse" wsaw:Action="urn:getPhyStatusResponse"/>
         </wsdl:operation>
         <wsdl:operation name="createVM">
             <wsdl:input message="axis2:createVMRequest" wsaw:Action="urn:createVM"/>
@@ -224,24 +200,6 @@
     </wsdl:portType>
     <wsdl:binding name="VMServerSOAP11Binding" type="axis2:VMServerPortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        <wsdl:operation name="hello">
-            <soap:operation soapAction="urn:hello" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="phyStatus">
-            <soap:operation soapAction="urn:phyStatus" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
         <wsdl:operation name="createVNet">
             <soap:operation soapAction="urn:createVNet" style="document"/>
             <wsdl:input>
@@ -251,8 +209,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="VMStatus">
-            <soap:operation soapAction="urn:VMStatus" style="document"/>
+        <wsdl:operation name="getVMStatus">
+            <soap:operation soapAction="urn:getVMStatus" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -271,6 +229,15 @@
         </wsdl:operation>
         <wsdl:operation name="destroyVM">
             <soap:operation soapAction="urn:destroyVM" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getPhyStatus">
+            <soap:operation soapAction="urn:getPhyStatus" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -308,24 +275,6 @@
     </wsdl:binding>
     <wsdl:binding name="VMServerSOAP12Binding" type="axis2:VMServerPortType">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        <wsdl:operation name="hello">
-            <soap12:operation soapAction="urn:hello" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="phyStatus">
-            <soap12:operation soapAction="urn:phyStatus" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
         <wsdl:operation name="createVNet">
             <soap12:operation soapAction="urn:createVNet" style="document"/>
             <wsdl:input>
@@ -335,8 +284,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="VMStatus">
-            <soap12:operation soapAction="urn:VMStatus" style="document"/>
+        <wsdl:operation name="getVMStatus">
+            <soap12:operation soapAction="urn:getVMStatus" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -355,6 +304,15 @@
         </wsdl:operation>
         <wsdl:operation name="destroyVM">
             <soap12:operation soapAction="urn:destroyVM" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getPhyStatus">
+            <soap12:operation soapAction="urn:getPhyStatus" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -392,24 +350,6 @@
     </wsdl:binding>
     <wsdl:binding name="VMServerHttpBinding" type="axis2:VMServerPortType">
         <http:binding verb="POST"/>
-        <wsdl:operation name="hello">
-            <http:operation location="VMServer/hello"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="hello"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="hello"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="phyStatus">
-            <http:operation location="VMServer/phyStatus"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="phyStatus"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="phyStatus"/>
-            </wsdl:output>
-        </wsdl:operation>
         <wsdl:operation name="createVNet">
             <http:operation location="VMServer/createVNet"/>
             <wsdl:input>
@@ -419,13 +359,13 @@
                 <mime:content type="text/xml" part="createVNet"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="VMStatus">
-            <http:operation location="VMServer/VMStatus"/>
+        <wsdl:operation name="getVMStatus">
+            <http:operation location="VMServer/getVMStatus"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="VMStatus"/>
+                <mime:content type="text/xml" part="getVMStatus"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="VMStatus"/>
+                <mime:content type="text/xml" part="getVMStatus"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="shutdownVM">
@@ -444,6 +384,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="destroyVM"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getPhyStatus">
+            <http:operation location="VMServer/getPhyStatus"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getPhyStatus"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getPhyStatus"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="createVM">
