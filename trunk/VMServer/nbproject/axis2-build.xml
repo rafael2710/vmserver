@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:axis2="http://www.netbeans.org/ns/axis2/1" xmlns:xalan="http://xml.apache.org/xslt" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3">
+    <!--
+                ===================
+                JAX-WS WSIMPORT SECTION
+                ===================
+            -->
+    <target name="java2wsdl-init" depends="init">
+        <mkdir dir="${basedir}/xml-resources/axis2/META-INF"/>
+        <taskdef name="java2wsdl" classname="org.apache.ws.java2wsdl.Java2WSDLTask">
+            <classpath path="${libs.axis2.classpath}"/>
+        </taskdef>
+    </target>
+    <target name="java2wsdl-check-VMServer" depends="java2wsdl-init">
+        <condition property="java2wsdl-check-VMServer.notRequired">
+            <available file="${basedir}/xml-resources/axis2/META-INF/VMServer.wsdl" type="file"/>
+        </condition>
+    </target>
+    <target name="java2wsdl-VMServer" depends="java2wsdl-check-VMServer, compile" unless="java2wsdl-check-VMServer.notRequired">
+        <java2wsdl className="vmserver.VMServer" serviceName="VMServer" outputLocation="${basedir}/xml-resources/axis2/META-INF" outputFileName="VMServer.wsdl" targetNamespace="http://vmserver/" schemaTargetNamespace="http://vmserver/xsd">
+            <classpath>
+                <pathelement location="${build.dir}/classes"/>
+                <pathelement location="${javac.classpath}"/>
+            </classpath>
+        </java2wsdl>
+    </target>
+    <target name="java2wsdl-clean-VMServer" depends="init">
+        <delete file="${basedir}/xml-resources/axis2/META-INF/VMServer.wsdl"/>
+    </target>
+    <target name="java2wsdl-check-StockQuoteService" depends="java2wsdl-init">
+        <condition property="java2wsdl-check-StockQuoteService.notRequired">
+            <available file="${basedir}/xml-resources/axis2/META-INF/StockQuoteService.wsdl" type="file"/>
+        </condition>
+    </target>
+    <target name="java2wsdl-StockQuoteService" depends="java2wsdl-check-StockQuoteService, compile" unless="java2wsdl-check-StockQuoteService.notRequired">
+        <java2wsdl className="vmserver.StockQuoteService" serviceName="StockQuoteService" outputLocation="${basedir}/xml-resources/axis2/META-INF" outputFileName="StockQuoteService.wsdl" targetNamespace="http://vmserver/" schemaTargetNamespace="http://vmserver/xsd">
+            <classpath>
+                <pathelement location="${build.dir}/classes"/>
+                <pathelement location="${javac.classpath}"/>
+            </classpath>
+        </java2wsdl>
+    </target>
+    <target name="java2wsdl-clean-StockQuoteService" depends="init">
+        <delete file="${basedir}/xml-resources/axis2/META-INF/StockQuoteService.wsdl"/>
+    </target>
+    <target name="axis2-aar" depends="compile, java2wsdl-VMServer, java2wsdl-StockQuoteService">
+        <mkdir dir="${build.dir}/axis2/WEB-INF/services"/>
+        <jar destfile="${build.dir}/axis2/WEB-INF/services/${ant.project.name}.aar">
+            <fileset excludes="**/Test.class" dir="${build.dir}/classes"/>
+            <fileset dir="${basedir}/xml-resources/axis2">
+                <include name="**/*.wsdl"/>
+                <include name="**/*.xsd"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.jar"/>
+            </fileset>
+        </jar>
+    </target>
+    <target name="axis2-deploy-dir-check" depends="axis2-aar">
+        <condition property="axis2-deploy-dir-required">
+            <isset property="axis2.deploy.dir"/>
+        </condition>
+    </target>
+    <target name="axis2-deploy-dir" depends="axis2-deploy-dir-check" if="axis2-deploy-dir-required">
+        <copy toDir="${axis2.deploy.dir}/WEB-INF/services">
+            <fileset dir="${build.dir}/axis2/WEB-INF/services">
+                <include name="*.aar"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="axis2-deploy-war-check" depends="axis2-aar">
+        <condition property="axis2-deploy-war-required">
+            <isset property="axis2.deploy.war"/>
+        </condition>
+    </target>
+    <target name="axis2-deploy-war" depends="axis2-deploy-war-check" if="axis2-deploy-war-required">
+        <jar destfile="${axis2.deploy.war}" update="true">
+            <fileset dir="${build.dir}/axis2">
+                <include name="**/*.aar"/>
+            </fileset>
+        </jar>
+    </target>
+    <target name="axis2-deploy" depends="axis2-deploy-dir, axis2-deploy-war"/>
+</project>

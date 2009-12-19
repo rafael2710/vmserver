@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<axis2 xmlns="http://www.netbeans.org/ns/axis2/1">
+    <service name="VMServer">
+        <service-class>vmserver.VMServer</service-class>
+        <generate-wsdl targetNamespace="http://vmserver/" schemaNamespace="http://vmserver/xsd"/>
+    </service>
+    <service name="StockQuoteService">
+        <service-class>vmserver.StockQuoteService</service-class>
+        <generate-wsdl targetNamespace="http://vmserver/" schemaNamespace="http://vmserver/xsd"/>
+    </service>
+</axis2>
+
+
+
