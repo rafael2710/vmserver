@@ -2,6 +2,7 @@ package vmserver;
 
 
 
+import java.util.Vector;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -20,10 +21,14 @@ import org.apache.axis2.client.ServiceClient;
 public class VMClient {
 
     private static EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
+    //reference need to be changed
 
     /**
      * This method will be called whenever a new virtual machine need to be created
      * on the network.
+     *
+     * Payload created:
+     * <vsm:createVM xmlns:vsm="http://vmserver/xsd"><vsm:phyServer>phy</vsm:phyServer><vsm:vmName>vmname</vsm:vmName><vsm:vmIP>10.10.0.1</vsm:vmIP><vsm:vmRAM>500</vsm:vmRAM><vsm:vmDiskSize>5</vsm:vmDiskSize></vsm:createVM>
      *
      * @param phyServer ip address of the physical machine that will host the new virtual machine
      * @param vmName Name for the virtual machine
@@ -82,20 +87,46 @@ public class VMClient {
           throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    public static OMElement getVMStatusPayload(String phyServer, String VMName){
+          throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static OMElement getPhyStatusPayload(String phyServer){
+          throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static OMElement shutdownPhyServerPayload(String phyServer){
+          throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static OMElement shutdownVMPayload(String phyServer, String VMName){
+          throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static OMElement destroyVMPayload(String phyServer, String VMName){
+          throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static OMElement createVNetPayload(Vector<String> phyServers, Vector<String> VMNames){
+          throw new UnsupportedOperationException("Not yet implemented");
+    }
+
 
     public static void main(String[] args) {
         try {
-            OMElement createVMPayload = createVMPayload("phy","vmname","10.10.0.1","500","5");
+            // creating message payload
+            OMElement messagePayload = createVMPayload("phy","vmname","10.10.0.1","500","5");
+            // set options to send message
             Options options = new Options();
             options.setTo(targetEPR);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
-
+            // create client
             ServiceClient sender = new ServiceClient();
             sender.setOptions(options);
-
-            OMElement result = sender.sendReceive(createVMPayload);
-
-            System.err.println("result: "+result.getFirstElement().getFirstElement().getText());
+            // send message and wait for the server response
+            OMElement result = sender.sendReceive(messagePayload);
+            // print some output
+            System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
 
         } catch (Exception e) {
             e.printStackTrace();
