@@ -30,7 +30,6 @@ public class VMServer {
         element.detach();
 
         Iterator it = element.getChildElements();
-
         Vector <OMElement> ele = new Vector();
         ele.clear();
         String returnText = "Virtual Machine created\nAttributes:\n";
@@ -51,11 +50,11 @@ public class VMServer {
           throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OMElement VMStatus(OMElement element){
+    public OMElement getVMStatus(OMElement element){
           throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OMElement phyStatus(OMElement element){
+    public OMElement getPhyStatus(OMElement element){
           throw new UnsupportedOperationException("Not yet implemented");
     }
 
