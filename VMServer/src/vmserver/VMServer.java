@@ -13,9 +13,7 @@ import org.apache.axiom.om.OMNamespace;
  */
 public class VMServer {
 
- //   public String hello(String name) {
- //       return "Hello "+name;
- //   }
+    Vector<PhysicalServer> phyServers;
 
     /**
      * This method creates a virtual machine and instiate it on a physical server

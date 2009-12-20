@@ -8,14 +8,7 @@
         </messageReceivers>
         <parameter name="ServiceClass">vmserver.VMServer</parameter>
     </service>
-    <service name="StockQuoteService" scope="application">
-        <description>StockQuoteService service</description>
-        <messageReceivers>
-            <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
-            <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
-        </messageReceivers>
-        <parameter name="ServiceClass">vmserver.StockQuoteService</parameter>
-    </service>
 </serviceGroup>
+
 
 

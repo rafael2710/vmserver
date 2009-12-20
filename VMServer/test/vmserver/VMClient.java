@@ -1,7 +1,5 @@
 package vmserver;
 
-
-
 import java.util.Vector;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
