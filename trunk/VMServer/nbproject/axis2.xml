@@ -4,11 +4,8 @@
         <service-class>vmserver.VMServer</service-class>
         <generate-wsdl targetNamespace="http://vmserver/" schemaNamespace="http://vmserver/xsd"/>
     </service>
-    <service name="StockQuoteService">
-        <service-class>vmserver.StockQuoteService</service-class>
-        <generate-wsdl targetNamespace="http://vmserver/" schemaNamespace="http://vmserver/xsd"/>
-    </service>
 </axis2>
+
 
 
 

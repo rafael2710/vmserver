@@ -27,23 +27,7 @@
     <target name="java2wsdl-clean-VMServer" depends="init">
         <delete file="${basedir}/xml-resources/axis2/META-INF/VMServer.wsdl"/>
     </target>
-    <target name="java2wsdl-check-StockQuoteService" depends="java2wsdl-init">
-        <condition property="java2wsdl-check-StockQuoteService.notRequired">
-            <available file="${basedir}/xml-resources/axis2/META-INF/StockQuoteService.wsdl" type="file"/>
-        </condition>
-    </target>
-    <target name="java2wsdl-StockQuoteService" depends="java2wsdl-check-StockQuoteService, compile" unless="java2wsdl-check-StockQuoteService.notRequired">
-        <java2wsdl className="vmserver.StockQuoteService" serviceName="StockQuoteService" outputLocation="${basedir}/xml-resources/axis2/META-INF" outputFileName="StockQuoteService.wsdl" targetNamespace="http://vmserver/" schemaTargetNamespace="http://vmserver/xsd">
-            <classpath>
-                <pathelement location="${build.dir}/classes"/>
-                <pathelement location="${javac.classpath}"/>
-            </classpath>
-        </java2wsdl>
-    </target>
-    <target name="java2wsdl-clean-StockQuoteService" depends="init">
-        <delete file="${basedir}/xml-resources/axis2/META-INF/StockQuoteService.wsdl"/>
-    </target>
-    <target name="axis2-aar" depends="compile, java2wsdl-VMServer, java2wsdl-StockQuoteService">
+    <target name="axis2-aar" depends="compile, java2wsdl-VMServer">
         <mkdir dir="${build.dir}/axis2/WEB-INF/services"/>
         <jar destfile="${build.dir}/axis2/WEB-INF/services/${ant.project.name}.aar">
             <fileset excludes="**/Test.class" dir="${build.dir}/classes"/>
