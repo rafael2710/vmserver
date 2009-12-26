@@ -39,10 +39,21 @@ public class VirtualMachine extends Computer{
 
         return element;
     }
-
+    /**
+     * Sets the location the virtual hard disk file.
+     * Location can be local or an URI.
+     *
+     * @param hardDiskLocation the virtual hard disk file URI
+     */
     public void setHardDiskLocation(String hardDiskLocation){
         this.hardDiskLocation = hardDiskLocation;
     }
+    /**
+     * Sets the location the virtual hard disk file.
+     * Location can be local or an URI.
+     *
+     * @return the virtual hard disk file URI
+     */
     public String getHardDiskLocation(){
         return hardDiskLocation;
     }
