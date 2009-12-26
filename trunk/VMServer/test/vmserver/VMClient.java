@@ -36,6 +36,7 @@ public class VMClient {
      *
      * @return true if the virtual machine was sucessfully created, false otherwise
      */
+    //public static OMElement createVMPayload(PhysicalServer phyServer, VitualMachine vm) {
     public static OMElement createVMPayload(String phyServer, String vmName, String vmIP, String vmRAM, String vmDiskSize) {
         OMFactory fac = OMAbstractFactory.getOMFactory();
         // Set the namespace of the messages
