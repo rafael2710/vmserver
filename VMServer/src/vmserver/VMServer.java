@@ -1,10 +1,14 @@
 package vmserver;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -21,6 +25,10 @@ import org.apache.axiom.om.OMNamespace;
  */
 public class VMServer {
 
+    /**
+     * TODO: Definir formatos de mensagens estritamente
+     */
+
     Vector<PhysicalServer> phyServers;
     String URI = "http://vmserver/xsd";
     String PREFIX = "vsm";
@@ -32,6 +40,16 @@ public class VMServer {
      * PHY_SERVER_1_NAME|PHY_SERVER_1_IP|VM_COUNT|VM_1_NAME , VM_1_IP ; VM_2_NAME , VM_2_IP
      * PHY_SERVER_2_NAME|PHY_SERVER_2_IP|VM_COUNT|VM_1_NAME , VM_1_IP ; VM_2_NAME , VM_2_IP
      */
+
+
+    public VMServer(){
+        FileOutputStream fstream;
+        try {
+            fstream = new FileOutputStream(DATABASE,true);
+        } catch (FileNotFoundException ex) {
+            System.err.println("The file could not be opened or created");
+        }
+    }
 
     /**
      * This method creates a virtual machine and instiate it on a physical server
@@ -83,6 +101,8 @@ public class VMServer {
     }
 
     public OMElement getVMStatus(OMElement element){
+        element.build();
+        element.detach();
           throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -107,15 +127,23 @@ public class VMServer {
     }
 
     /*Method to save the vm on the database (text file)*/
-    private void SaveVM(VirtualMachine vm){
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    private VirtualMachine LoadVM(String vmName){
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+//    private void SaveVM(VirtualMachine vm){
+  //      throw new UnsupportedOperationException("Not yet implemented");
+//    }
+//    private VirtualMachine LoadVM(String vmName){
+//        throw new UnsupportedOperationException("Not yet implemented");
+//    }
 
     private void SavePS(PhysicalServer ps){
-        throw new UnsupportedOperationException("Not yet implemented");
+        try {
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(DATABASE, true));
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
+            bw.write(ps.getName()+"|"+ps.getIP()+"\n");
+            bw.close();
+            out.close();
+        } catch (Exception ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private PhysicalServer LoadPS(String psName){
@@ -123,50 +151,34 @@ public class VMServer {
         int i = 0;
         String strLine;
         try {
-            FileInputStream fstream = new FileInputStream(DATABASE);
-            DataInputStream in = new DataInputStream(fstream);
+            DataInputStream in = new DataInputStream(new FileInputStream(DATABASE));
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            VirtualMachine vm = null;
             // for each physical server
-            while ((strLine = br.readLine()) != null)   {
+            while ((strLine = br.readLine()) != null){
                 //look for the desired physical server
                 if(strLine.startsWith(psName+"|")){
                     ps = new PhysicalServer();
                     StringTokenizer st = new StringTokenizer(strLine, PS_TOKEN);
                     ps.setName(st.nextToken());
                     ps.setIP(st.nextToken());
-                    //String a = st.nextToken();
-                    int max = (new Integer(st.nextToken())).intValue();
-                    String vmList = st.nextToken();
-                    for(i=0;i<max;i++){                        
-                        // VM_1_NAME,VM_1_IP;VM_2_NAME,VM_2_IP
-                        StringTokenizer st2 = new StringTokenizer(vmList, VM_TOKEN);
-                        vm = new VirtualMachine();
-                        while(st2.hasMoreTokens()){
-                            StringTokenizer st3 = new StringTokenizer(st2.nextToken(), VM_PROPERTIES_TOKEN);
-                            vm.setName(st3.nextToken());
-                            vm.setIP(st3.nextToken());
-                            // aqui talvez pegar dados completos da vm pela XenAPI
-                            ps.addVM(vm);
-                        }
-                    }
+                    // aqui talvez pegar dados completos da vm pela XenAPI
                     break;
                 }
             }
-            //Close the input stream
             in.close();
         } catch (Exception ex) {
             Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
         return ps;
     }
 
      public static void main(String[] args) {
         PhysicalServer ps = new PhysicalServer();
         VMServer vm = new VMServer();
-        ps = vm.LoadPS("PHY_SERVER_1_NAME");
+        ps.setName("PS_TEST_NAME");
+        ps.setIP("PS_TEST_IP");
+        vm.SavePS(ps);
+ //       ps = vm.LoadPS("PHY_SERVER_1_NAME");
     }
 
 }
