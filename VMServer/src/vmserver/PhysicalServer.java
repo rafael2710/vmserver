@@ -8,7 +8,7 @@ import java.util.Vector;
  */
 public class PhysicalServer extends Computer{
     // Fields
-   Vector<VirtualMachine> vmList;
+    Vector<VirtualMachine> vmList;
 
     PhysicalServer(){
         vmList = new Vector<VirtualMachine>();
@@ -17,6 +17,20 @@ public class PhysicalServer extends Computer{
     // Methods
     public Vector<VirtualMachine> getVMList(){
           return vmList;
+    }
+
+    public VirtualMachine getVM(String vmName){
+        int i = 0;
+        for(i=0;i<vmList.size();i++){
+            if((vmList.get(i).getName()).equals(vmName)){
+                return vmList.get(i);
+            }
+        }
+        return null;
+    }
+
+    public void addVM(VirtualMachine vm){
+        vmList.add(vm);
     }
     
 }

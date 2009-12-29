@@ -18,6 +18,9 @@ import org.apache.axis2.client.ServiceClient;
 
 public class VMClient {
 
+    static String URI = "http://vmserver/xsd";
+    static String PREFIX = "vsm";
+
     private static EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
     //reference need to be changed
 
@@ -40,7 +43,7 @@ public class VMClient {
     public static OMElement createVMPayload(String phyServer, String vmName, String vmIP, String vmRAM, String vmDiskSize) {
         OMFactory fac = OMAbstractFactory.getOMFactory();
         // Set the namespace of the messages
-        OMNamespace omNs = fac.createOMNamespace("http://vmserver/xsd", "vsm");
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
         OMElement method = fac.createOMElement("createVM", omNs);
         
