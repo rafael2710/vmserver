@@ -15,6 +15,8 @@ public class VirtualMachine extends Computer{
     // Fields
     String hardDiskLocation;
     OperatingSystem operatingSystem;
+    String URI = "http://vmserver/xsd";
+    String PREFIX = "vsm";
 
     // Methods
     public boolean start(){
@@ -27,7 +29,7 @@ public class VirtualMachine extends Computer{
 
         OMFactory fac = OMAbstractFactory.getOMFactory();
         // Set the namespace of the messages
-        OMNamespace omNs = fac.createOMNamespace("http://vmserver/xsd", "vsm");
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
 
         OMElement value = fac.createOMElement("hardDiskLocation", omNs);
         value.addChild(fac.createOMText(value, hardDiskLocation));
