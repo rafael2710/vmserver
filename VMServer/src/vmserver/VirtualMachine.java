@@ -13,10 +13,10 @@ enum OperatingSystem {Linux,Windows,MacOS};
 
 public class VirtualMachine extends Computer{
     // Fields
-    String hardDiskLocation;
-    OperatingSystem operatingSystem;
-    String URI = "http://vmserver/xsd";
-    String PREFIX = "vsm";
+    private String hardDiskLocation;
+    private OperatingSystem operatingSystem;
+    private String URI = "http://vmserver/xsd";
+    private String PREFIX = "vsm";
 
     // Methods
     public boolean start(){

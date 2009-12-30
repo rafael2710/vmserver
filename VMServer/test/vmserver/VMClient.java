@@ -18,8 +18,8 @@ import org.apache.axis2.client.ServiceClient;
 
 public class VMClient {
 
-    static String URI = "http://vmserver/xsd";
-    static String PREFIX = "vsm";
+    private static String URI = "http://vmserver/xsd";
+    private static String PREFIX = "vsm";
 
     private static EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
     //reference need to be changed

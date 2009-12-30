@@ -11,10 +11,10 @@ import org.apache.axiom.om.OMNamespace;
  */
 public class Computer {
     // Fields
-    String name;
-    String IP;
-    int RAMSize;
-    int hardDiskSize;
+    private String name;
+    private String IP;
+    private int RAMSize;
+    private int hardDiskSize;
 
     // Methods
     public boolean shutdown(){
