@@ -29,16 +29,16 @@ public class VMServer {
      * TODO: Definir formatos de mensagens estritamente
      */
 
-    Vector<PhysicalServer> phyServers;
-    String URI = "http://vmserver/xsd";
-    String PREFIX = "vsm";
-    String DATABASE = "data.txt";
-    String PS_TOKEN = "|";
-    String VM_TOKEN = ";";
-    String VM_PROPERTIES_TOKEN = ",";
+    private Vector<PhysicalServer> phyServers;
+    private String URI = "http://vmserver/xsd";
+    private String PREFIX = "vsm";
+    private String DATABASE = "data.txt";
+    private String PS_TOKEN = "|";
+//    private String VM_TOKEN = ";";
+//    private String VM_PROPERTIES_TOKEN = ",";
     /* File Format
-     * PHY_SERVER_1_NAME|PHY_SERVER_1_IP|VM_COUNT|VM_1_NAME , VM_1_IP ; VM_2_NAME , VM_2_IP
-     * PHY_SERVER_2_NAME|PHY_SERVER_2_IP|VM_COUNT|VM_1_NAME , VM_1_IP ; VM_2_NAME , VM_2_IP
+     * PHY_SERVER_1_NAME|PHY_SERVER_1_IP
+     * PHY_SERVER_2_NAME|PHY_SERVER_2_IP
      */
 
 

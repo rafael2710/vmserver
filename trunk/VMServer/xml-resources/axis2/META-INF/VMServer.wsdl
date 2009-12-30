@@ -114,6 +114,13 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="main">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="args" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="createVNetRequest">
@@ -158,6 +165,9 @@
     <wsdl:message name="migrateVMResponse">
         <wsdl:part name="parameters" element="ns0:migrateVMResponse"/>
     </wsdl:message>
+    <wsdl:message name="mainRequest">
+        <wsdl:part name="parameters" element="ns0:main"/>
+    </wsdl:message>
     <wsdl:message name="shutdownPhyServerRequest">
         <wsdl:part name="parameters" element="ns0:shutdownPhyServer"/>
     </wsdl:message>
@@ -192,6 +202,9 @@
         <wsdl:operation name="migrateVM">
             <wsdl:input message="axis2:migrateVMRequest" wsaw:Action="urn:migrateVM"/>
             <wsdl:output message="axis2:migrateVMResponse" wsaw:Action="urn:migrateVMResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="main">
+            <wsdl:input message="axis2:mainRequest" wsaw:Action="urn:main"/>
         </wsdl:operation>
         <wsdl:operation name="shutdownPhyServer">
             <wsdl:input message="axis2:shutdownPhyServerRequest" wsaw:Action="urn:shutdownPhyServer"/>
@@ -262,6 +275,12 @@
             <wsdl:output>
                 <soap:body use="literal"/>
             </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="main">
+            <soap:operation soapAction="urn:main" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
         </wsdl:operation>
         <wsdl:operation name="shutdownPhyServer">
             <soap:operation soapAction="urn:shutdownPhyServer" style="document"/>
@@ -338,6 +357,12 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="main">
+            <soap12:operation soapAction="urn:main" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
         <wsdl:operation name="shutdownPhyServer">
             <soap12:operation soapAction="urn:shutdownPhyServer" style="document"/>
             <wsdl:input>
@@ -412,6 +437,12 @@
             <wsdl:output>
                 <mime:content type="text/xml" part="migrateVM"/>
             </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="main">
+            <http:operation location="VMServer/main"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="main"/>
+            </wsdl:input>
         </wsdl:operation>
         <wsdl:operation name="shutdownPhyServer">
             <http:operation location="VMServer/shutdownPhyServer"/>
