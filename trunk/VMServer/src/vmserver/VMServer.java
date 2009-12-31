@@ -62,6 +62,7 @@ public class VMServer {
     public OMElement createVM(OMElement element){
         element.build();
         element.detach();
+        System.out.println("createVM message: "+element.toString());
 
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
@@ -84,6 +85,9 @@ public class VMServer {
         element.build();
         element.detach();
 
+
+        System.out.println("migrateVM message: "+element.toString());
+
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
         ele.clear();
@@ -103,6 +107,7 @@ public class VMServer {
     public OMElement getVMStatus(OMElement element){
         element.build();
         element.detach();
+        System.out.println("getVMStatus message: "+element.toString());
           throw new UnsupportedOperationException("Not yet implemented");
     }
 
