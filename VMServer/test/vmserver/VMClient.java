@@ -86,11 +86,55 @@ public class VMClient {
      * @return true if the virtual machine was sucessfully migrated, false otherwise
      */
     public static OMElement migrateVMPayload(String sourcePhyServer, String destPhyServer, String vmName, String live){
-          throw new UnsupportedOperationException("Not yet implemented");
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("migrateVM", omNs);
+
+        // Attributes
+
+        // Source Physical Server IP
+        OMElement value = fac.createOMElement("sourcePhyServer", omNs);
+        value.addChild(fac.createOMText(value, sourcePhyServer));
+        method.addChild(value);
+        // Destination Physical Server IP
+        value = fac.createOMElement("destPhyServer", omNs);
+        value.addChild(fac.createOMText(value, destPhyServer));
+        method.addChild(value);
+        // Virtual Machine Name
+        value = fac.createOMElement("vmName", omNs);
+        value.addChild(fac.createOMText(value, vmName));
+        method.addChild(value);
+        // Live Migration Boolean
+        value = fac.createOMElement("live", omNs);
+        value.addChild(fac.createOMText(value, live));
+        method.addChild(value);
+
+        return method;
     }
 
     public static OMElement getVMStatusPayload(String phyServer, String VMName){
-          throw new UnsupportedOperationException("Not yet implemented");
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("getVMStatus", omNs);
+
+        // Attributes
+
+        // Physical Server IP
+        OMElement value = fac.createOMElement("phyServer", omNs);
+        value.addChild(fac.createOMText(value, phyServer));
+        method.addChild(value);
+        // Virtual Machine Name
+        value = fac.createOMElement("vmName", omNs);
+        value.addChild(fac.createOMText(value, VMName));
+        method.addChild(value);
+
+        return method;
     }
 
     public static OMElement getPhyStatusPayload(String phyServer){
@@ -129,6 +173,14 @@ public class VMClient {
             OMElement result = sender.sendReceive(messagePayload);
             // print some output
             System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
+
+            messagePayload = migrateVMPayload("phyS","phyD","VM_NAME","live_true");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
+
+            messagePayload = getVMStatusPayload("phy", "vmname");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
