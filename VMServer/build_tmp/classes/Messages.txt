@@ -1,0 +1,8 @@
+#### getVMStatus ####
+<vsm:getVMStatus xmlns:vsm="http://vmserver/xsd"><vsm:phyServer>phy</vsm:phyServer><vsm:vmName>vmname</vsm:vmName></vsm:getVMStatus>
+
+#### createVM ####
+<vsm:createVM xmlns:vsm="http://vmserver/xsd"><vsm:phyServer>phy</vsm:phyServer><vsm:vmName>vmname</vsm:vmName><vsm:vmIP>10.10.0.1</vsm:vmIP><vsm:vmRAM>500</vsm:vmRAM><vsm:vmDiskSize>5</vsm:vmDiskSize></vsm:createVM>
+
+#### migrageVM ####
+<vsm:migrateVM xmlns:vsm="http://vmserver/xsd"><vsm:sourcePhyServer>phyS</vsm:sourcePhyServer><vsm:destPhyServer>phyD</vsm:destPhyServer><vsm:vmName>VM_NAME</vsm:vmName><vsm:live>live_true</vsm:live></vsm:migrateVM>
