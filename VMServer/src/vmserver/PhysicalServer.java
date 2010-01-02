@@ -16,7 +16,7 @@ public class PhysicalServer extends Computer{
 
     // Methods
     public Vector<VirtualMachine> getVMList(){
-          return vmList;
+        return vmList;
     }
 
     public VirtualMachine getVM(String vmName){
@@ -32,5 +32,4 @@ public class PhysicalServer extends Computer{
     public void addVM(VirtualMachine vm){
         vmList.add(vm);
     }
-    
 }

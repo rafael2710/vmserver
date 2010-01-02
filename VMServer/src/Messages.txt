@@ -6,3 +6,18 @@
 
 #### migrageVM ####
 <vsm:migrateVM xmlns:vsm="http://vmserver/xsd"><vsm:sourcePhyServer>phyS</vsm:sourcePhyServer><vsm:destPhyServer>phyD</vsm:destPhyServer><vsm:vmName>VM_NAME</vsm:vmName><vsm:live>live_true</vsm:live></vsm:migrateVM>
+
+#### getPhyStatus ####
+<vsm:getPhyStatus xmlns:vsm="http://vmserver/xsd"><vsm:phyServer>phyS</vsm:phyServer></vsm:getPhyStatus>
+
+#### shutdownPhyServer ####
+<vsm:shutdownPhyServer xmlns:vsm="http://vmserver/xsd"><vsm:phyServer>phyS</vsm:phyServer></vsm:shutdownPhyServer>
+
+#### shutdownVM ####
+<vsm:shutdownVM xmlns:vsm="http://vmserver/xsd"><vsm:phyServer>phy</vsm:phyServer><vsm:VMName>vmname</vsm:VMName></vsm:shutdownVM>
+
+#### destroyVM ####
+<vsm:destroyVM xmlns:vsm="http://vmserver/xsd"><vsm:phyServer>phy</vsm:phyServer><vsm:VMName>vmname</vsm:VMName></vsm:destroyVM>
+
+#### createVNet ####
+<vsm:createVNet xmlns:vsm="http://vmserver/xsd"><vsm:nodeCount>3</vsm:nodeCount><vsm:phyServer>phyS_1</vsm:phyServer><vsm:phyServer>phyS_2</vsm:phyServer><vsm:phyServer>phyS_3</vsm:phyServer><vsm:VMName>vm_1</vsm:VMName><vsm:VMName>vm_2</vsm:VMName><vsm:VMName>vm_3</vsm:VMName></vsm:createVNet>
