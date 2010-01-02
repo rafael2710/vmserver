@@ -18,10 +18,10 @@ import org.apache.axis2.client.ServiceClient;
 
 public class VMClient {
 
-    private static String URI = "http://vmserver/xsd";
-    private static String PREFIX = "vsm";
+    private String URI = "http://vmserver/xsd";
+    private String PREFIX = "vsm"; 
 
-    private static EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
+    private EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
     //reference need to be changed
 
     /**
@@ -40,7 +40,7 @@ public class VMClient {
      * @return true if the virtual machine was sucessfully created, false otherwise
      */
     //public static OMElement createVMPayload(PhysicalServer phyServer, VitualMachine vm) {
-    public static OMElement createVMPayload(String phyServer, String vmName, String vmIP, String vmRAM, String vmDiskSize) {
+    public OMElement createVMPayload(String phyServer, String vmName, String vmIP, String vmRAM, String vmDiskSize) {
         OMFactory fac = OMAbstractFactory.getOMFactory();
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
@@ -85,7 +85,7 @@ public class VMClient {
      *
      * @return true if the virtual machine was sucessfully migrated, false otherwise
      */
-    public static OMElement migrateVMPayload(String sourcePhyServer, String destPhyServer, String vmName, String live){
+    public OMElement migrateVMPayload(String sourcePhyServer, String destPhyServer, String vmName, String live){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -115,7 +115,7 @@ public class VMClient {
         return method;
     }
 
-    public static OMElement getVMStatusPayload(String phyServer, String VMName){
+    public OMElement getVMStatusPayload(String phyServer, String VMName){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -137,34 +137,128 @@ public class VMClient {
         return method;
     }
 
-    public static OMElement getPhyStatusPayload(String phyServer){
-          throw new UnsupportedOperationException("Not yet implemented");
+    public OMElement getPhyStatusPayload(String phyServer){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("getPhyStatus", omNs);
+
+        // Attributes
+
+        // Physical Server IP
+        OMElement value = fac.createOMElement("phyServer", omNs);
+        value.addChild(fac.createOMText(value, phyServer));
+        method.addChild(value);
+
+        return method;
     }
 
-    public static OMElement shutdownPhyServerPayload(String phyServer){
-          throw new UnsupportedOperationException("Not yet implemented");
+    public OMElement shutdownPhyServerPayload(String phyServer){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("shutdownPhyServer", omNs);
+
+        // Attributes
+
+        // Physical Server IP
+        OMElement value = fac.createOMElement("phyServer", omNs);
+        value.addChild(fac.createOMText(value, phyServer));
+        method.addChild(value);
+
+        return method;
     }
 
-    public static OMElement shutdownVMPayload(String phyServer, String VMName){
-          throw new UnsupportedOperationException("Not yet implemented");
+    public OMElement shutdownVMPayload(String phyServer, String VMName){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("shutdownVM", omNs);
+
+        // Attributes
+
+        // Physical Server IP
+        OMElement value = fac.createOMElement("phyServer", omNs);
+        value.addChild(fac.createOMText(value, phyServer));
+        method.addChild(value);
+        // Virtual Machine Name
+        value = fac.createOMElement("VMName", omNs);
+        value.addChild(fac.createOMText(value, VMName));
+        method.addChild(value);
+
+        return method;
     }
 
-    public static OMElement destroyVMPayload(String phyServer, String VMName){
-          throw new UnsupportedOperationException("Not yet implemented");
+    public OMElement destroyVMPayload(String phyServer, String VMName){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("destroyVM", omNs);
+
+        // Attributes
+
+        // Physical Server IP
+        OMElement value = fac.createOMElement("phyServer", omNs);
+        value.addChild(fac.createOMText(value, phyServer));
+        method.addChild(value);
+        // Virtual Machine Name
+        value = fac.createOMElement("VMName", omNs);
+        value.addChild(fac.createOMText(value, VMName));
+        method.addChild(value);
+
+        return method;
     }
 
-    public static OMElement createVNetPayload(Vector<String> phyServers, Vector<String> VMNames){
-          throw new UnsupportedOperationException("Not yet implemented");
+    public OMElement createVNetPayload(Vector<String> phyServers, Vector<String> VMNames) throws Exception{
+        if(phyServers.size()!=VMNames.size()){
+            throw new Exception("Vectors sizes do not match!");
+        }
+        int i = 0;
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("createVNet", omNs);
+
+        // Attributes
+
+        OMElement value = fac.createOMElement("nodeCount", omNs);
+        value.addChild(fac.createOMText(value, Integer.toString(phyServers.size())));
+        method.addChild(value);
+        // Physical Servers IP
+        for(i=0;i<phyServers.size();i++){
+            value = fac.createOMElement("phyServer", omNs);
+            value.addChild(fac.createOMText(value, phyServers.elementAt(i)));
+            method.addChild(value);
+        }
+        // Virtual Machine Name
+        for(i=0;i<phyServers.size();i++){
+            value = fac.createOMElement("VMName", omNs);
+            value.addChild(fac.createOMText(value, VMNames.elementAt(i)));
+            method.addChild(value);
+        }
+
+        return method;
     }
 
 
     public static void main(String[] args) {
         try {
             // creating message payload
-            OMElement messagePayload = createVMPayload("phy","vmname","10.10.0.1","500","5");
+            VMClient vmc = new VMClient();
+            OMElement messagePayload = vmc.createVMPayload("phy","vmname","10.10.0.1","500","5");
             // set options to send message
             Options options = new Options();
-            options.setTo(targetEPR);
+            options.setTo(vmc.targetEPR);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             // create client
             ServiceClient sender = new ServiceClient();
@@ -174,11 +268,39 @@ public class VMClient {
             // print some output
             System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
 
-            messagePayload = migrateVMPayload("phyS","phyD","VM_NAME","live_true");
+            messagePayload = vmc.migrateVMPayload("phyS","phyD","VM_NAME","live_true");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
-            messagePayload = getVMStatusPayload("phy", "vmname");
+            messagePayload = vmc.getPhyStatusPayload("phyS");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
+
+            messagePayload = vmc.shutdownPhyServerPayload("phyS");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
+
+            messagePayload = vmc.getVMStatusPayload("phy", "vmname");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
+
+            messagePayload = vmc.shutdownVMPayload("phy", "vmname");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
+
+            messagePayload = vmc.destroyVMPayload("phy", "vmname");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
+
+            Vector<String> phyServers = new Vector<String>();
+            phyServers.add("phyS_1");
+            phyServers.add("phyS_2");
+            phyServers.add("phyS_3");
+            Vector<String> VMNames = new Vector<String>();
+            VMNames.add("vm_1");
+            VMNames.add("vm_2");
+            VMNames.add("vm_3");
+            messagePayload = vmc.createVNetPayload(phyServers, VMNames);
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
@@ -186,6 +308,4 @@ public class VMClient {
             e.printStackTrace();
         }
     }
-
-
 }
