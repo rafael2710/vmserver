@@ -4,6 +4,9 @@ import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.libvirt.Connect;
+import org.libvirt.Domain;
+import org.libvirt.LibvirtException;
 
 /**
  *
@@ -65,17 +68,34 @@ public class VirtualMachine extends Computer{
     public String getOperatingSystem(){
         return operatingSystem.toString();
     }
-
-
+    
     public static void main(String[] args){
         VirtualMachine vm = new VirtualMachine();
         vm.operatingSystem = OperatingSystem.Linux;
         System.out.println(vm.operatingSystem.toString());
         System.out.println(vm.status().toString());
         vm.setOperatingSystem("Windows");
-         System.out.println(vm.getOperatingSystem());
+        System.out.println(vm.getOperatingSystem());
 
+
+        // Test code for libvirt
+
+        Connect conn=null;
+        try{
+            conn = new Connect("test:///default", true);
+        } catch (LibvirtException e){
+            System.out.println("exception caught:"+e);
+            System.out.println(e.getError());
+        } 
+        try{
+            Domain testDomain=conn.domainLookupByName("test");
+            System.out.println("Domain:" + testDomain.getName() + " id " +
+                               testDomain.getID() + " running " +
+                               testDomain.getOSType());
+        } catch (LibvirtException e){
+            System.out.println("exception caught:"+e);
+            System.out.println(e.getError());
+        }
 
     }
-
 }

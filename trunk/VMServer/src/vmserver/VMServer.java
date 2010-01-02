@@ -108,27 +108,42 @@ public class VMServer {
         element.build();
         element.detach();
         System.out.println("getVMStatus message: "+element.toString());
-          throw new UnsupportedOperationException("Not yet implemented");
+        return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public OMElement getPhyStatus(OMElement element){
-          throw new UnsupportedOperationException("Not yet implemented");
+        element.build();
+        element.detach();
+        System.out.println("getPhyStatus message: "+element.toString());
+        return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public OMElement shutdownPhyServer(OMElement element){
-          throw new UnsupportedOperationException("Not yet implemented");
+        element.build();
+        element.detach();
+        System.out.println("shutdownPhyServer message: "+element.toString());
+        return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public OMElement shutdownVM(OMElement element){
-          throw new UnsupportedOperationException("Not yet implemented");
+        element.build();
+        element.detach();
+        System.out.println("shutdownVM message: "+element.toString());
+        return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public OMElement destroyVM(OMElement element){
-          throw new UnsupportedOperationException("Not yet implemented");
+        element.build();
+        element.detach();
+        System.out.println("destroyVM message: "+element.toString());
+        return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public OMElement createVNet(OMElement element){
-          throw new UnsupportedOperationException("Not yet implemented");
+        element.build();
+        element.detach();
+        System.out.println("createVNet message: "+element.toString());
+        return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /*Method to save the vm on the database (text file)*/
@@ -185,5 +200,4 @@ public class VMServer {
         vm.SavePS(ps);
  //       ps = vm.LoadPS("PHY_SERVER_1_NAME");
     }
-
 }
