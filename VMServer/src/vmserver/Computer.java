@@ -16,6 +16,8 @@ public class Computer {
     private int RAMSize;
     private int hardDiskSize;
 
+    
+
     // Methods
     public boolean shutdown(){
         throw new UnsupportedOperationException("Not yet implemented");
