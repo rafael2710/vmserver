@@ -59,7 +59,7 @@ public class VMServer {
      * @param element
      * @return an OMElement with the results of the operation
      */
-    public OMElement createVM(OMElement element){
+    public OMElement createVirtualMachine(OMElement element){
         element.build();
         element.detach();
         System.out.println("createVM message: "+element.toString());
@@ -81,7 +81,7 @@ public class VMServer {
         return method;
     }
 
-    public OMElement migrateVM(OMElement element){
+    public OMElement migrateVirtualMachine(OMElement element){
         element.build();
         element.detach();
 
@@ -104,42 +104,42 @@ public class VMServer {
         return method;
     }
 
-    public OMElement getVMStatus(OMElement element){
+    public OMElement getVirtualMachineStatus(OMElement element){
         element.build();
         element.detach();
         System.out.println("getVMStatus message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OMElement getPhyStatus(OMElement element){
+    public OMElement getPhysicalServerStatus(OMElement element){
         element.build();
         element.detach();
         System.out.println("getPhyStatus message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OMElement shutdownPhyServer(OMElement element){
+    public OMElement shutdownPhysicalServer(OMElement element){
         element.build();
         element.detach();
         System.out.println("shutdownPhyServer message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OMElement shutdownVM(OMElement element){
+    public OMElement shutdownVirtualMachine(OMElement element){
         element.build();
         element.detach();
         System.out.println("shutdownVM message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OMElement destroyVM(OMElement element){
+    public OMElement destroyVirtualMachine(OMElement element){
         element.build();
         element.detach();
         System.out.println("destroyVM message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OMElement createVNet(OMElement element){
+    public OMElement createVirtualNetwork(OMElement element){
         element.build();
         element.detach();
         System.out.println("createVNet message: "+element.toString());
@@ -154,7 +154,7 @@ public class VMServer {
 //        throw new UnsupportedOperationException("Not yet implemented");
 //    }
 
-    private void SavePS(PhysicalServer ps){
+    private void savePhysicalServer(PhysicalServer ps){
         try {
             DataOutputStream out = new DataOutputStream(new FileOutputStream(DATABASE, true));
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
@@ -166,7 +166,7 @@ public class VMServer {
         }
     }
     
-    private PhysicalServer LoadPS(String psName){
+    private PhysicalServer loadPhysicalServer(String psName){
         PhysicalServer ps = null;
         int i = 0;
         String strLine;
@@ -192,12 +192,12 @@ public class VMServer {
         return ps;
     }
 
-     public static void main(String[] args) {
+     private static void main(String[] args) {
         PhysicalServer ps = new PhysicalServer();
         VMServer vm = new VMServer();
         ps.setName("PS_TEST_NAME");
         ps.setIP("PS_TEST_IP");
-        vm.SavePS(ps);
+        vm.savePhysicalServer(ps);
  //       ps = vm.LoadPS("PHY_SERVER_1_NAME");
     }
 }
