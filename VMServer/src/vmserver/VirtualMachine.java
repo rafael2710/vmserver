@@ -82,12 +82,13 @@ public class VirtualMachine extends Computer{
 
         Connect conn=null;
         try{
-            conn = new Connect("test:///default", true);
+            conn = new Connect("xen+ssh://floresta/", true);
+            System.out.println("OK");
         } catch (LibvirtException e){
             System.out.println("exception caught:"+e);
             System.out.println(e.getError());
         } 
-        try{
+  /*      try{
             Domain testDomain=conn.domainLookupByName("test");
             System.out.println("Domain:" + testDomain.getName() + " id " +
                                testDomain.getID() + " running " +
@@ -95,7 +96,7 @@ public class VirtualMachine extends Computer{
         } catch (LibvirtException e){
             System.out.println("exception caught:"+e);
             System.out.println(e.getError());
-        }
+        }*/
 
     }
 }

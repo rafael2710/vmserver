@@ -39,8 +39,8 @@ public class VMClient {
      *
      * @return true if the virtual machine was sucessfully created, false otherwise
      */
-    //public static OMElement createVMPayload(PhysicalServer phyServer, VitualMachine vm) {
-    public OMElement createVMPayload(String phyServer, String vmName, String vmIP, String vmRAM, String vmDiskSize) {
+    //public static OMElement createVirtualMachinePayload(PhysicalServer phyServer, VitualMachine vm) {
+    public OMElement createVirtualMachinePayload(String phyServer, String vmName, String vmIP, String vmRAM, String vmDiskSize) {
         OMFactory fac = OMAbstractFactory.getOMFactory();
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
@@ -85,7 +85,7 @@ public class VMClient {
      *
      * @return true if the virtual machine was sucessfully migrated, false otherwise
      */
-    public OMElement migrateVMPayload(String sourcePhyServer, String destPhyServer, String vmName, String live){
+    public OMElement migrateVirtualMachinePayload(String sourcePhyServer, String destPhyServer, String vmName, String live){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -115,7 +115,7 @@ public class VMClient {
         return method;
     }
 
-    public OMElement getVMStatusPayload(String phyServer, String VMName){
+    public OMElement getVirtualMachineStatusPayload(String phyServer, String VMName){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -137,7 +137,7 @@ public class VMClient {
         return method;
     }
 
-    public OMElement getPhyStatusPayload(String phyServer){
+    public OMElement getPhysicalServerStatusPayload(String phyServer){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -155,7 +155,7 @@ public class VMClient {
         return method;
     }
 
-    public OMElement shutdownPhyServerPayload(String phyServer){
+    public OMElement shutdownPhysicalServerPayload(String phyServer){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -173,7 +173,7 @@ public class VMClient {
         return method;
     }
 
-    public OMElement shutdownVMPayload(String phyServer, String VMName){
+    public OMElement shutdownVirtualMachinePayload(String phyServer, String VMName){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -195,7 +195,7 @@ public class VMClient {
         return method;
     }
 
-    public OMElement destroyVMPayload(String phyServer, String VMName){
+    public OMElement destroyVirtualMachinePayload(String phyServer, String VMName){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
@@ -217,7 +217,7 @@ public class VMClient {
         return method;
     }
 
-    public OMElement createVNetPayload(Vector<String> phyServers, Vector<String> VMNames) throws Exception{
+    public OMElement createVirtualNetworkPayload(Vector<String> phyServers, Vector<String> VMNames) throws Exception{
         if(phyServers.size()!=VMNames.size()){
             throw new Exception("Vectors sizes do not match!");
         }
@@ -255,7 +255,7 @@ public class VMClient {
         try {
             // creating message payload
             VMClient vmc = new VMClient();
-            OMElement messagePayload = vmc.createVMPayload("phy","vmname","10.10.0.1","500","5");
+            OMElement messagePayload = vmc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
             // set options to send message
             Options options = new Options();
             options.setTo(vmc.targetEPR);
@@ -268,27 +268,27 @@ public class VMClient {
             // print some output
             System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
 
-            messagePayload = vmc.migrateVMPayload("phyS","phyD","VM_NAME","live_true");
+            messagePayload = vmc.migrateVirtualMachinePayload("phyS","phyD","VM_NAME","live_true");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
-            messagePayload = vmc.getPhyStatusPayload("phyS");
+            messagePayload = vmc.getPhysicalServerStatusPayload("phyS");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
-            messagePayload = vmc.shutdownPhyServerPayload("phyS");
+            messagePayload = vmc.shutdownPhysicalServerPayload("phyS");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
-            messagePayload = vmc.getVMStatusPayload("phy", "vmname");
+            messagePayload = vmc.getVirtualMachineStatusPayload("phy", "vmname");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
-            messagePayload = vmc.shutdownVMPayload("phy", "vmname");
+            messagePayload = vmc.shutdownVirtualMachinePayload("phy", "vmname");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
-            messagePayload = vmc.destroyVMPayload("phy", "vmname");
+            messagePayload = vmc.destroyVirtualMachinePayload("phy", "vmname");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
@@ -300,7 +300,7 @@ public class VMClient {
             VMNames.add("vm_1");
             VMNames.add("vm_2");
             VMNames.add("vm_3");
-            messagePayload = vmc.createVNetPayload(phyServers, VMNames);
+            messagePayload = vmc.createVirtualNetworkPayload(phyServers, VMNames);
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 

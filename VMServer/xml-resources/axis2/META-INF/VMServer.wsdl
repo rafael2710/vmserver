@@ -2,219 +2,206 @@
 <wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:axis2="http://vmserver/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://vmserver/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://vmserver/">
     <wsdl:types>
         <xs:schema xmlns:ns="http://vmserver/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://vmserver/xsd">
-            <xs:element name="createVM">
+            <xs:element name="createVirtualMachine">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="createVMResponse">
+            <xs:element name="createVirtualMachineResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="createVNet">
+            <xs:element name="createVirtualNetwork">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="createVNetResponse">
+            <xs:element name="createVirtualNetworkResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="destroyVM">
+            <xs:element name="destroyVirtualMachine">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="destroyVMResponse">
+            <xs:element name="destroyVirtualMachineResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="getPhyStatus">
+            <xs:element name="getPhysicalServerStatus">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="getPhyStatusResponse">
+            <xs:element name="getPhysicalServerStatusResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="getVMStatus">
+            <xs:element name="getVirtualMachineStatus">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="getVMStatusResponse">
+            <xs:element name="getVirtualMachineStatusResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="migrateVM">
+            <xs:element name="migrateVirtualMachine">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="migrateVMResponse">
+            <xs:element name="migrateVirtualMachineResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="shutdownPhyServer">
+            <xs:element name="shutdownPhysicalServer">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="shutdownPhyServerResponse">
+            <xs:element name="shutdownPhysicalServerResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="shutdownVM">
+            <xs:element name="shutdownVirtualMachine">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="element" nillable="true" type="xs:anyType"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="shutdownVMResponse">
+            <xs:element name="shutdownVirtualMachineResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="main">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="args" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:schema>
     </wsdl:types>
-    <wsdl:message name="createVNetRequest">
-        <wsdl:part name="parameters" element="ns0:createVNet"/>
+    <wsdl:message name="getPhysicalServerStatusRequest">
+        <wsdl:part name="parameters" element="ns0:getPhysicalServerStatus"/>
     </wsdl:message>
-    <wsdl:message name="createVNetResponse">
-        <wsdl:part name="parameters" element="ns0:createVNetResponse"/>
+    <wsdl:message name="getPhysicalServerStatusResponse">
+        <wsdl:part name="parameters" element="ns0:getPhysicalServerStatusResponse"/>
     </wsdl:message>
-    <wsdl:message name="getVMStatusRequest">
-        <wsdl:part name="parameters" element="ns0:getVMStatus"/>
+    <wsdl:message name="shutdownVirtualMachineRequest">
+        <wsdl:part name="parameters" element="ns0:shutdownVirtualMachine"/>
     </wsdl:message>
-    <wsdl:message name="getVMStatusResponse">
-        <wsdl:part name="parameters" element="ns0:getVMStatusResponse"/>
+    <wsdl:message name="shutdownVirtualMachineResponse">
+        <wsdl:part name="parameters" element="ns0:shutdownVirtualMachineResponse"/>
     </wsdl:message>
-    <wsdl:message name="shutdownVMRequest">
-        <wsdl:part name="parameters" element="ns0:shutdownVM"/>
+    <wsdl:message name="shutdownPhysicalServerRequest">
+        <wsdl:part name="parameters" element="ns0:shutdownPhysicalServer"/>
     </wsdl:message>
-    <wsdl:message name="shutdownVMResponse">
-        <wsdl:part name="parameters" element="ns0:shutdownVMResponse"/>
+    <wsdl:message name="shutdownPhysicalServerResponse">
+        <wsdl:part name="parameters" element="ns0:shutdownPhysicalServerResponse"/>
     </wsdl:message>
-    <wsdl:message name="destroyVMRequest">
-        <wsdl:part name="parameters" element="ns0:destroyVM"/>
+    <wsdl:message name="createVirtualNetworkRequest">
+        <wsdl:part name="parameters" element="ns0:createVirtualNetwork"/>
     </wsdl:message>
-    <wsdl:message name="destroyVMResponse">
-        <wsdl:part name="parameters" element="ns0:destroyVMResponse"/>
+    <wsdl:message name="createVirtualNetworkResponse">
+        <wsdl:part name="parameters" element="ns0:createVirtualNetworkResponse"/>
     </wsdl:message>
-    <wsdl:message name="getPhyStatusRequest">
-        <wsdl:part name="parameters" element="ns0:getPhyStatus"/>
+    <wsdl:message name="createVirtualMachineRequest">
+        <wsdl:part name="parameters" element="ns0:createVirtualMachine"/>
     </wsdl:message>
-    <wsdl:message name="getPhyStatusResponse">
-        <wsdl:part name="parameters" element="ns0:getPhyStatusResponse"/>
+    <wsdl:message name="createVirtualMachineResponse">
+        <wsdl:part name="parameters" element="ns0:createVirtualMachineResponse"/>
     </wsdl:message>
-    <wsdl:message name="createVMRequest">
-        <wsdl:part name="parameters" element="ns0:createVM"/>
+    <wsdl:message name="getVirtualMachineStatusRequest">
+        <wsdl:part name="parameters" element="ns0:getVirtualMachineStatus"/>
     </wsdl:message>
-    <wsdl:message name="createVMResponse">
-        <wsdl:part name="parameters" element="ns0:createVMResponse"/>
+    <wsdl:message name="getVirtualMachineStatusResponse">
+        <wsdl:part name="parameters" element="ns0:getVirtualMachineStatusResponse"/>
     </wsdl:message>
-    <wsdl:message name="migrateVMRequest">
-        <wsdl:part name="parameters" element="ns0:migrateVM"/>
+    <wsdl:message name="migrateVirtualMachineRequest">
+        <wsdl:part name="parameters" element="ns0:migrateVirtualMachine"/>
     </wsdl:message>
-    <wsdl:message name="migrateVMResponse">
-        <wsdl:part name="parameters" element="ns0:migrateVMResponse"/>
+    <wsdl:message name="migrateVirtualMachineResponse">
+        <wsdl:part name="parameters" element="ns0:migrateVirtualMachineResponse"/>
     </wsdl:message>
-    <wsdl:message name="mainRequest">
-        <wsdl:part name="parameters" element="ns0:main"/>
+    <wsdl:message name="destroyVirtualMachineRequest">
+        <wsdl:part name="parameters" element="ns0:destroyVirtualMachine"/>
     </wsdl:message>
-    <wsdl:message name="shutdownPhyServerRequest">
-        <wsdl:part name="parameters" element="ns0:shutdownPhyServer"/>
-    </wsdl:message>
-    <wsdl:message name="shutdownPhyServerResponse">
-        <wsdl:part name="parameters" element="ns0:shutdownPhyServerResponse"/>
+    <wsdl:message name="destroyVirtualMachineResponse">
+        <wsdl:part name="parameters" element="ns0:destroyVirtualMachineResponse"/>
     </wsdl:message>
     <wsdl:portType name="VMServerPortType">
-        <wsdl:operation name="createVNet">
-            <wsdl:input message="axis2:createVNetRequest" wsaw:Action="urn:createVNet"/>
-            <wsdl:output message="axis2:createVNetResponse" wsaw:Action="urn:createVNetResponse"/>
+        <wsdl:operation name="getPhysicalServerStatus">
+            <wsdl:input message="axis2:getPhysicalServerStatusRequest" wsaw:Action="urn:getPhysicalServerStatus"/>
+            <wsdl:output message="axis2:getPhysicalServerStatusResponse" wsaw:Action="urn:getPhysicalServerStatusResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="getVMStatus">
-            <wsdl:input message="axis2:getVMStatusRequest" wsaw:Action="urn:getVMStatus"/>
-            <wsdl:output message="axis2:getVMStatusResponse" wsaw:Action="urn:getVMStatusResponse"/>
+        <wsdl:operation name="shutdownVirtualMachine">
+            <wsdl:input message="axis2:shutdownVirtualMachineRequest" wsaw:Action="urn:shutdownVirtualMachine"/>
+            <wsdl:output message="axis2:shutdownVirtualMachineResponse" wsaw:Action="urn:shutdownVirtualMachineResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="shutdownVM">
-            <wsdl:input message="axis2:shutdownVMRequest" wsaw:Action="urn:shutdownVM"/>
-            <wsdl:output message="axis2:shutdownVMResponse" wsaw:Action="urn:shutdownVMResponse"/>
+        <wsdl:operation name="shutdownPhysicalServer">
+            <wsdl:input message="axis2:shutdownPhysicalServerRequest" wsaw:Action="urn:shutdownPhysicalServer"/>
+            <wsdl:output message="axis2:shutdownPhysicalServerResponse" wsaw:Action="urn:shutdownPhysicalServerResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="destroyVM">
-            <wsdl:input message="axis2:destroyVMRequest" wsaw:Action="urn:destroyVM"/>
-            <wsdl:output message="axis2:destroyVMResponse" wsaw:Action="urn:destroyVMResponse"/>
+        <wsdl:operation name="createVirtualNetwork">
+            <wsdl:input message="axis2:createVirtualNetworkRequest" wsaw:Action="urn:createVirtualNetwork"/>
+            <wsdl:output message="axis2:createVirtualNetworkResponse" wsaw:Action="urn:createVirtualNetworkResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="getPhyStatus">
-            <wsdl:input message="axis2:getPhyStatusRequest" wsaw:Action="urn:getPhyStatus"/>
-            <wsdl:output message="axis2:getPhyStatusResponse" wsaw:Action="urn:getPhyStatusResponse"/>
+        <wsdl:operation name="createVirtualMachine">
+            <wsdl:input message="axis2:createVirtualMachineRequest" wsaw:Action="urn:createVirtualMachine"/>
+            <wsdl:output message="axis2:createVirtualMachineResponse" wsaw:Action="urn:createVirtualMachineResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="createVM">
-            <wsdl:input message="axis2:createVMRequest" wsaw:Action="urn:createVM"/>
-            <wsdl:output message="axis2:createVMResponse" wsaw:Action="urn:createVMResponse"/>
+        <wsdl:operation name="getVirtualMachineStatus">
+            <wsdl:input message="axis2:getVirtualMachineStatusRequest" wsaw:Action="urn:getVirtualMachineStatus"/>
+            <wsdl:output message="axis2:getVirtualMachineStatusResponse" wsaw:Action="urn:getVirtualMachineStatusResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="migrateVM">
-            <wsdl:input message="axis2:migrateVMRequest" wsaw:Action="urn:migrateVM"/>
-            <wsdl:output message="axis2:migrateVMResponse" wsaw:Action="urn:migrateVMResponse"/>
+        <wsdl:operation name="migrateVirtualMachine">
+            <wsdl:input message="axis2:migrateVirtualMachineRequest" wsaw:Action="urn:migrateVirtualMachine"/>
+            <wsdl:output message="axis2:migrateVirtualMachineResponse" wsaw:Action="urn:migrateVirtualMachineResponse"/>
         </wsdl:operation>
-        <wsdl:operation name="main">
-            <wsdl:input message="axis2:mainRequest" wsaw:Action="urn:main"/>
-        </wsdl:operation>
-        <wsdl:operation name="shutdownPhyServer">
-            <wsdl:input message="axis2:shutdownPhyServerRequest" wsaw:Action="urn:shutdownPhyServer"/>
-            <wsdl:output message="axis2:shutdownPhyServerResponse" wsaw:Action="urn:shutdownPhyServerResponse"/>
+        <wsdl:operation name="destroyVirtualMachine">
+            <wsdl:input message="axis2:destroyVirtualMachineRequest" wsaw:Action="urn:destroyVirtualMachine"/>
+            <wsdl:output message="axis2:destroyVirtualMachineResponse" wsaw:Action="urn:destroyVirtualMachineResponse"/>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="VMServerSOAP11Binding" type="axis2:VMServerPortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        <wsdl:operation name="createVNet">
-            <soap:operation soapAction="urn:createVNet" style="document"/>
+        <wsdl:operation name="getPhysicalServerStatus">
+            <soap:operation soapAction="urn:getPhysicalServerStatus" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -222,8 +209,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getVMStatus">
-            <soap:operation soapAction="urn:getVMStatus" style="document"/>
+        <wsdl:operation name="shutdownVirtualMachine">
+            <soap:operation soapAction="urn:shutdownVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -231,8 +218,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="shutdownVM">
-            <soap:operation soapAction="urn:shutdownVM" style="document"/>
+        <wsdl:operation name="shutdownPhysicalServer">
+            <soap:operation soapAction="urn:shutdownPhysicalServer" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -240,8 +227,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="destroyVM">
-            <soap:operation soapAction="urn:destroyVM" style="document"/>
+        <wsdl:operation name="createVirtualNetwork">
+            <soap:operation soapAction="urn:createVirtualNetwork" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -249,8 +236,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getPhyStatus">
-            <soap:operation soapAction="urn:getPhyStatus" style="document"/>
+        <wsdl:operation name="createVirtualMachine">
+            <soap:operation soapAction="urn:createVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -258,8 +245,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="createVM">
-            <soap:operation soapAction="urn:createVM" style="document"/>
+        <wsdl:operation name="getVirtualMachineStatus">
+            <soap:operation soapAction="urn:getVirtualMachineStatus" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -267,8 +254,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="migrateVM">
-            <soap:operation soapAction="urn:migrateVM" style="document"/>
+        <wsdl:operation name="migrateVirtualMachine">
+            <soap:operation soapAction="urn:migrateVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -276,14 +263,8 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="main">
-            <soap:operation soapAction="urn:main" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="shutdownPhyServer">
-            <soap:operation soapAction="urn:shutdownPhyServer" style="document"/>
+        <wsdl:operation name="destroyVirtualMachine">
+            <soap:operation soapAction="urn:destroyVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -294,8 +275,8 @@
     </wsdl:binding>
     <wsdl:binding name="VMServerSOAP12Binding" type="axis2:VMServerPortType">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        <wsdl:operation name="createVNet">
-            <soap12:operation soapAction="urn:createVNet" style="document"/>
+        <wsdl:operation name="getPhysicalServerStatus">
+            <soap12:operation soapAction="urn:getPhysicalServerStatus" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -303,8 +284,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getVMStatus">
-            <soap12:operation soapAction="urn:getVMStatus" style="document"/>
+        <wsdl:operation name="shutdownVirtualMachine">
+            <soap12:operation soapAction="urn:shutdownVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -312,8 +293,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="shutdownVM">
-            <soap12:operation soapAction="urn:shutdownVM" style="document"/>
+        <wsdl:operation name="shutdownPhysicalServer">
+            <soap12:operation soapAction="urn:shutdownPhysicalServer" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -321,8 +302,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="destroyVM">
-            <soap12:operation soapAction="urn:destroyVM" style="document"/>
+        <wsdl:operation name="createVirtualNetwork">
+            <soap12:operation soapAction="urn:createVirtualNetwork" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -330,8 +311,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getPhyStatus">
-            <soap12:operation soapAction="urn:getPhyStatus" style="document"/>
+        <wsdl:operation name="createVirtualMachine">
+            <soap12:operation soapAction="urn:createVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -339,8 +320,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="createVM">
-            <soap12:operation soapAction="urn:createVM" style="document"/>
+        <wsdl:operation name="getVirtualMachineStatus">
+            <soap12:operation soapAction="urn:getVirtualMachineStatus" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -348,8 +329,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="migrateVM">
-            <soap12:operation soapAction="urn:migrateVM" style="document"/>
+        <wsdl:operation name="migrateVirtualMachine">
+            <soap12:operation soapAction="urn:migrateVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -357,14 +338,8 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="main">
-            <soap12:operation soapAction="urn:main" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="shutdownPhyServer">
-            <soap12:operation soapAction="urn:shutdownPhyServer" style="document"/>
+        <wsdl:operation name="destroyVirtualMachine">
+            <soap12:operation soapAction="urn:destroyVirtualMachine" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -375,82 +350,76 @@
     </wsdl:binding>
     <wsdl:binding name="VMServerHttpBinding" type="axis2:VMServerPortType">
         <http:binding verb="POST"/>
-        <wsdl:operation name="createVNet">
-            <http:operation location="VMServer/createVNet"/>
+        <wsdl:operation name="getPhysicalServerStatus">
+            <http:operation location="VMServer/getPhysicalServerStatus"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="createVNet"/>
+                <mime:content type="text/xml" part="getPhysicalServerStatus"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="createVNet"/>
+                <mime:content type="text/xml" part="getPhysicalServerStatus"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getVMStatus">
-            <http:operation location="VMServer/getVMStatus"/>
+        <wsdl:operation name="shutdownVirtualMachine">
+            <http:operation location="VMServer/shutdownVirtualMachine"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="getVMStatus"/>
+                <mime:content type="text/xml" part="shutdownVirtualMachine"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="getVMStatus"/>
+                <mime:content type="text/xml" part="shutdownVirtualMachine"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="shutdownVM">
-            <http:operation location="VMServer/shutdownVM"/>
+        <wsdl:operation name="shutdownPhysicalServer">
+            <http:operation location="VMServer/shutdownPhysicalServer"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="shutdownVM"/>
+                <mime:content type="text/xml" part="shutdownPhysicalServer"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="shutdownVM"/>
+                <mime:content type="text/xml" part="shutdownPhysicalServer"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="destroyVM">
-            <http:operation location="VMServer/destroyVM"/>
+        <wsdl:operation name="createVirtualNetwork">
+            <http:operation location="VMServer/createVirtualNetwork"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="destroyVM"/>
+                <mime:content type="text/xml" part="createVirtualNetwork"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="destroyVM"/>
+                <mime:content type="text/xml" part="createVirtualNetwork"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="getPhyStatus">
-            <http:operation location="VMServer/getPhyStatus"/>
+        <wsdl:operation name="createVirtualMachine">
+            <http:operation location="VMServer/createVirtualMachine"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="getPhyStatus"/>
+                <mime:content type="text/xml" part="createVirtualMachine"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="getPhyStatus"/>
+                <mime:content type="text/xml" part="createVirtualMachine"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="createVM">
-            <http:operation location="VMServer/createVM"/>
+        <wsdl:operation name="getVirtualMachineStatus">
+            <http:operation location="VMServer/getVirtualMachineStatus"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="createVM"/>
+                <mime:content type="text/xml" part="getVirtualMachineStatus"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="createVM"/>
+                <mime:content type="text/xml" part="getVirtualMachineStatus"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="migrateVM">
-            <http:operation location="VMServer/migrateVM"/>
+        <wsdl:operation name="migrateVirtualMachine">
+            <http:operation location="VMServer/migrateVirtualMachine"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="migrateVM"/>
+                <mime:content type="text/xml" part="migrateVirtualMachine"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="migrateVM"/>
+                <mime:content type="text/xml" part="migrateVirtualMachine"/>
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="main">
-            <http:operation location="VMServer/main"/>
+        <wsdl:operation name="destroyVirtualMachine">
+            <http:operation location="VMServer/destroyVirtualMachine"/>
             <wsdl:input>
-                <mime:content type="text/xml" part="main"/>
-            </wsdl:input>
-        </wsdl:operation>
-        <wsdl:operation name="shutdownPhyServer">
-            <http:operation location="VMServer/shutdownPhyServer"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="shutdownPhyServer"/>
+                <mime:content type="text/xml" part="destroyVirtualMachine"/>
             </wsdl:input>
             <wsdl:output>
-                <mime:content type="text/xml" part="shutdownPhyServer"/>
+                <mime:content type="text/xml" part="destroyVirtualMachine"/>
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
