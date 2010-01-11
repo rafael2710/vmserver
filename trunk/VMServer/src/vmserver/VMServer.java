@@ -65,6 +65,7 @@ public class VMServer {
     public OMElement createVirtualMachine(OMElement element){
         element.build();
         element.detach();
+        System.err.println("createVM message: "+element.toString());
         System.out.println("createVM message: "+element.toString());
 
         Iterator it = element.getChildElements();
@@ -78,7 +79,7 @@ public class VMServer {
 
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
-        OMElement method = fac.createOMElement("createVMResponse", omNs);
+        OMElement method = fac.createOMElement("createVirtualMachineResponse", omNs);
         method.addChild(fac.createOMText(returnText)); 
 
         return method;
@@ -87,6 +88,8 @@ public class VMServer {
     public OMElement migrateVirtualMachine(OMElement element){
         element.build();
         element.detach();
+        System.err.println("MigrateVirtualMachine");
+        Logger.getLogger(VMServer.class.getName()).log(Level.ALL, "MigrageVirtualMachine");
 
   //      System.out.println("migrateVM message: "+element.toString());
 
