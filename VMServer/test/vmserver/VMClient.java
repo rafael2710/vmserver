@@ -45,7 +45,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("createVM", omNs);
+        OMElement method = fac.createOMElement("createVirtualMachine", omNs);
         
         // Attributes
 
@@ -91,7 +91,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("migrateVM", omNs);
+        OMElement method = fac.createOMElement("migrateVirtualMachine", omNs);
 
         // Attributes
 
@@ -121,7 +121,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("getVMStatus", omNs);
+        OMElement method = fac.createOMElement("getVirtualMachineStatus", omNs);
 
         // Attributes
 
@@ -143,7 +143,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("getPhyStatus", omNs);
+        OMElement method = fac.createOMElement("getPhysicalServerStatus", omNs);
 
         // Attributes
 
@@ -161,7 +161,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("shutdownPhyServer", omNs);
+        OMElement method = fac.createOMElement("shutdownPhysicalServer", omNs);
 
         // Attributes
 
@@ -179,7 +179,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("shutdownVM", omNs);
+        OMElement method = fac.createOMElement("shutdownVirtualMachine", omNs);
 
         // Attributes
 
@@ -201,7 +201,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("destroyVM", omNs);
+        OMElement method = fac.createOMElement("destroyVirtualMachine", omNs);
 
         // Attributes
 
@@ -227,7 +227,7 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("createVNet", omNs);
+        OMElement method = fac.createOMElement("createVirtualNetwork", omNs);
 
         // Attributes
 
