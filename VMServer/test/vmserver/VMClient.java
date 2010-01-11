@@ -253,9 +253,7 @@ public class VMClient {
 
     public static void main(String[] args) {
         try {
-            // creating message payload
             VMClient vmc = new VMClient();
-            OMElement messagePayload = vmc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
             // set options to send message
             Options options = new Options();
             options.setTo(vmc.targetEPR);
@@ -263,46 +261,50 @@ public class VMClient {
             // create client
             ServiceClient sender = new ServiceClient();
             sender.setOptions(options);
+
+            // creating message payload
+            OMElement messagePayload = vmc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
             // send message and wait for the server response
             OMElement result = sender.sendReceive(messagePayload);
             // print some output
             System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
 
-            messagePayload = vmc.migrateVirtualMachinePayload("phyS","phyD","VM_NAME","live_true");
+            messagePayload = vmc.migrateVirtualMachinePayload("engenhao","inga","test_vmserver","true");
             result = sender.sendReceive(messagePayload);
             System.out.println("result: "+result.toString());
 
-            messagePayload = vmc.getPhysicalServerStatusPayload("phyS");
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
 
-            messagePayload = vmc.shutdownPhysicalServerPayload("phyS");
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
-
-            messagePayload = vmc.getVirtualMachineStatusPayload("phy", "vmname");
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
-
-            messagePayload = vmc.shutdownVirtualMachinePayload("phy", "vmname");
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
-
-            messagePayload = vmc.destroyVirtualMachinePayload("phy", "vmname");
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
-
-            Vector<String> phyServers = new Vector<String>();
-            phyServers.add("phyS_1");
-            phyServers.add("phyS_2");
-            phyServers.add("phyS_3");
-            Vector<String> VMNames = new Vector<String>();
-            VMNames.add("vm_1");
-            VMNames.add("vm_2");
-            VMNames.add("vm_3");
-            messagePayload = vmc.createVirtualNetworkPayload(phyServers, VMNames);
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
+//            messagePayload = vmc.getPhysicalServerStatusPayload("phyS");
+//            result = sender.sendReceive(messagePayload);
+//            System.out.println("result: "+result.toString());
+//
+//            messagePayload = vmc.shutdownPhysicalServerPayload("phyS");
+//            result = sender.sendReceive(messagePayload);
+//            System.out.println("result: "+result.toString());
+//
+//            messagePayload = vmc.getVirtualMachineStatusPayload("phy", "vmname");
+//            result = sender.sendReceive(messagePayload);
+//            System.out.println("result: "+result.toString());
+//
+//            messagePayload = vmc.shutdownVirtualMachinePayload("phy", "vmname");
+//            result = sender.sendReceive(messagePayload);
+//            System.out.println("result: "+result.toString());
+//
+//            messagePayload = vmc.destroyVirtualMachinePayload("phy", "vmname");
+//            result = sender.sendReceive(messagePayload);
+//            System.out.println("result: "+result.toString());
+//
+//            Vector<String> phyServers = new Vector<String>();
+//            phyServers.add("phyS_1");
+//            phyServers.add("phyS_2");
+//            phyServers.add("phyS_3");
+//            Vector<String> VMNames = new Vector<String>();
+//            VMNames.add("vm_1");
+//            VMNames.add("vm_2");
+//            VMNames.add("vm_3");
+//            messagePayload = vmc.createVirtualNetworkPayload(phyServers, VMNames);
+//            result = sender.sendReceive(messagePayload);
+//            System.out.println("result: "+result.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
