@@ -18,6 +18,9 @@ import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.libvirt.Connect;
+import org.libvirt.Domain;
+import org.libvirt.LibvirtException;
 
 /**
  *
@@ -85,22 +88,57 @@ public class VMServer {
         element.build();
         element.detach();
 
-
-        System.out.println("migrateVM message: "+element.toString());
+  //      System.out.println("migrateVM message: "+element.toString());
 
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
         ele.clear();
-        String returnText = "Virtual Machine migrated\nAttributes:\n";
+        String returnText = "SUCESS - Virtual Machine migrated\nAttributes:\n";
+        String att = "";
+        String sourcePhyServer = "", destPhyServer = "", vmName = "";
+        int live = 0;
         while(it.hasNext()){
             ele.add((OMElement) it.next());
-            returnText = returnText+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            if(ele.lastElement().getLocalName().equals("sourcePhyServer")){
+                sourcePhyServer = ele.lastElement().getText();
+                att = "sourcePhyServer: "+sourcePhyServer+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("destPhyServer")){
+                destPhyServer = ele.lastElement().getText();
+                att = "destPhyServer: "+destPhyServer+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmName")){
+                vmName = ele.lastElement().getText();
+                att = "vmName: "+vmName+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("live")){
+                if(ele.lastElement().getText().equals("true")){
+                    live = 1;
+                    att = "live: true\n";
+                }
+                else
+                    att = "live: false\n";
+            }
+        }        
+        try {
+            Connect  sConn = new Connect("xen+ssh://"+sourcePhyServer+"/", true);
+            Domain domain = sConn.domainLookupByName(vmName);
+            Connect dConn = new Connect("xen+ssh://"+destPhyServer+"/", true);
+            //Domain newDomain = domain.migrate(dConn, VIR_MIGRATE_LIVE, null, null, 0);
+            Domain newDomain = domain.migrate(dConn, live, null, null, 0);
+            if(newDomain==null)
+                returnText = "ERROR - The Domain could not be migrated\nAttributes:\n";
+        } catch (LibvirtException ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            returnText = "ERROR - The Domain could not be migrated - Exception: "+ex.getMessage()+"\nAttributes:\n";
         }
+        returnText = returnText + att;
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         OMElement method = fac.createOMElement("migrateVMResponse", omNs);
         method.addChild(fac.createOMText(returnText));
-
+        
         return method;
     }
 
@@ -108,7 +146,7 @@ public class VMServer {
         element.build();
         element.detach();
         System.out.println("getVMStatus message: "+element.toString());
-        return element;//throw new UnsupportedOperationException("Not yet implemented");
+        return element;
     }
 
     public OMElement getPhysicalServerStatus(OMElement element){
