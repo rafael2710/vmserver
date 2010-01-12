@@ -20,7 +20,10 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.libvirt.Connect;
 import org.libvirt.Domain;
+import org.libvirt.DomainInfo;
+import org.libvirt.DomainInfo.DomainState;
 import org.libvirt.LibvirtException;
+import org.libvirt.NodeInfo;
 
 /**
  *
@@ -148,36 +151,240 @@ public class VMServer {
     public OMElement getVirtualMachineStatus(OMElement element){
         element.build();
         element.detach();
-        System.out.println("getVMStatus message: "+element.toString());
-        return element;
+        System.out.println("getVirtualMachineStatus message: "+element.toString());
+        Iterator it = element.getChildElements();
+        Vector <OMElement> ele = new Vector();
+        String phyServer = null, vmName = null;
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement retElement = fac.createOMElement("getVirtualMachineStatusResponse", omNs);
+
+        while(it.hasNext()){
+            ele.add((OMElement) it.next());
+            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            if(ele.lastElement().getLocalName().equals("phyServer")){
+                phyServer = ele.lastElement().getText();
+                //att = "phyServer: "+phyServer+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmName")){
+                vmName = ele.lastElement().getText();
+                //att = "phyServer: "+vmName+"\n";
+            }
+        }
+        try {
+            Connect  Conn = new Connect("xen+ssh://"+phyServer+"/", true);
+            Domain domain = Conn.domainLookupByName(vmName);
+            DomainInfo domainInfo = domain.getInfo();
+
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Sucess"));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("memory", omNs);
+            value.addChild(fac.createOMText(value, (new Long(domainInfo.memory).toString())));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("vcpus", omNs);
+            value.addChild(fac.createOMText(value, new Integer(domainInfo.nrVirtCpu).toString()));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("vcpus", omNs);
+            value.addChild(fac.createOMText(value, domainInfo.state.toString()));
+            retElement.addChild(value);
+
+            return retElement;
+        } catch (LibvirtException ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Error: "+ex.getMessage()));
+            retElement.addChild(value);
+            return retElement;
+        }
     }
 
     public OMElement getPhysicalServerStatus(OMElement element){
         element.build();
         element.detach();
-        System.out.println("getPhyStatus message: "+element.toString());
-        return element;//throw new UnsupportedOperationException("Not yet implemented");
+        System.out.println("getPhysicalServerStatus message: "+element.toString());
+
+        Iterator it = element.getChildElements();
+        Vector <OMElement> ele = new Vector();
+        String phyServer = null;
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement retElement = fac.createOMElement("getPhysicalServerStatusResponse", omNs);
+
+        while(it.hasNext()){
+            ele.add((OMElement) it.next());
+            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            if(ele.lastElement().getLocalName().equals("phyServer")){
+                phyServer = ele.lastElement().getText();
+                //att = "phyServer: "+phyServer+"\n";
+            }
+        }
+        try {
+            Connect  Conn = new Connect("xen+ssh://"+phyServer+"/", true);
+            NodeInfo nodeInfo = Conn.nodeInfo();
+
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Sucess"));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("cores", omNs);
+            value.addChild(fac.createOMText(value, (new Integer(nodeInfo.cores).toString())));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("cpus", omNs);
+            value.addChild(fac.createOMText(value, new Integer(nodeInfo.cpus).toString()));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("memory", omNs);
+            value.addChild(fac.createOMText(value, new Long(nodeInfo.memory).toString()));
+            retElement.addChild(value);
+
+            int domainCount = Conn.numOfDomains();
+
+            value = fac.createOMElement("domainCount", omNs);
+            value.addChild(fac.createOMText(value, new Integer(domainCount).toString()));
+            retElement.addChild(value);
+            
+            int[] domains = Conn.listDomains();
+
+            for(int i=0;i<domainCount;i++){
+                value = fac.createOMElement("domain", omNs);
+                value.addChild(fac.createOMText(value, Conn.domainLookupByID(domains[i]).getName()));
+                retElement.addChild(value);
+            }
+
+            return retElement;
+        } catch (LibvirtException ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Error: "+ex.getMessage()));
+            retElement.addChild(value);
+            return retElement;
+        }
     }
 
     public OMElement shutdownPhysicalServer(OMElement element){
         element.build();
         element.detach();
-        System.out.println("shutdownPhyServer message: "+element.toString());
-        return element;//throw new UnsupportedOperationException("Not yet implemented");
+        System.out.println("shutdownPhysicalServer message: "+element.toString());
+
+        Iterator it = element.getChildElements();
+        Vector <OMElement> ele = new Vector();
+        String phyServer = null;
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement retElement = fac.createOMElement("shutdownPhysicalServerResponse", omNs);
+
+        while(it.hasNext()){
+            ele.add((OMElement) it.next());
+            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            if(ele.lastElement().getLocalName().equals("phyServer")){
+                phyServer = ele.lastElement().getText();
+                //att = "phyServer: "+phyServer+"\n";
+            }
+        }
+        try {
+            Connect  Conn = new Connect("xen+ssh://"+phyServer+"/", true);
+            //TODO: Servidor não está sendo desligado
+   //         NodeInfo nodeInfo = Conn.nodeInfo();
+
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Sucess"));
+            retElement.addChild(value);
+
+
+            return retElement;
+        } catch (LibvirtException ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Error: "+ex.getMessage()));
+            retElement.addChild(value);
+            return retElement;
+        }
     }
 
     public OMElement shutdownVirtualMachine(OMElement element){
         element.build();
         element.detach();
-        System.out.println("shutdownVM message: "+element.toString());
-        return element;//throw new UnsupportedOperationException("Not yet implemented");
+        System.out.println("shutdownVirtualMachine message: "+element.toString());
+
+        Iterator it = element.getChildElements();
+        Vector <OMElement> ele = new Vector();
+        String phyServer = null, vmName = null;
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement retElement = fac.createOMElement("shutdownVirtualMachineResponse", omNs);
+
+        while(it.hasNext()){
+            ele.add((OMElement) it.next());
+            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            if(ele.lastElement().getLocalName().equals("phyServer")){
+                phyServer = ele.lastElement().getText();
+                //att = "phyServer: "+phyServer+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmName")){
+                vmName = ele.lastElement().getText();
+                //att = "phyServer: "+vmName+"\n";
+            }
+        }
+        try {
+            Connect  Conn = new Connect("xen+ssh://"+phyServer+"/", true);
+            Domain domain = Conn.domainLookupByName(vmName);
+            domain.shutdown();
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Sucess"));
+            retElement.addChild(value);
+            return retElement;
+        } catch (LibvirtException ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Error: "+ex.getMessage()));
+            retElement.addChild(value);
+            return retElement;
+        }
     }
 
     public OMElement destroyVirtualMachine(OMElement element){
         element.build();
         element.detach();
-        System.out.println("destroyVM message: "+element.toString());
-        return element;//throw new UnsupportedOperationException("Not yet implemented");
+        System.out.println("destroyVirtualMachine message: "+element.toString());
+        Iterator it = element.getChildElements();
+        Vector <OMElement> ele = new Vector();
+        String phyServer = null, vmName = null;
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement retElement = fac.createOMElement("destroyVirtualMachineResponse", omNs);
+
+        while(it.hasNext()){
+            ele.add((OMElement) it.next());
+            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            if(ele.lastElement().getLocalName().equals("phyServer")){
+                phyServer = ele.lastElement().getText();
+                //att = "phyServer: "+phyServer+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmName")){
+                vmName = ele.lastElement().getText();
+                //att = "phyServer: "+vmName+"\n";
+            }
+        }
+        try {
+            Connect  Conn = new Connect("xen+ssh://"+phyServer+"/", true);
+            Domain domain = Conn.domainLookupByName(vmName);
+            domain.destroy();
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Sucess"));
+            retElement.addChild(value);
+            return retElement;
+        } catch (LibvirtException ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Error: "+ex.getMessage()));
+            retElement.addChild(value);
+            return retElement;
+        }
     }
 
     public OMElement createVirtualNetwork(OMElement element){
