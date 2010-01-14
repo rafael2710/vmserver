@@ -269,22 +269,22 @@ public class VMClient {
             // print some output
             System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
 
-            messagePayload = vmc.migrateVirtualMachinePayload("engenhao","inga","test_vmserver","true");
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
+ //           messagePayload = vmc.migrateVirtualMachinePayload("engenhao","inga","test_vmserver","true");
+   ///         result = sender.sendReceive(messagePayload);
+ //           System.out.println("result: "+result.toString());
 
 
-//            messagePayload = vmc.getPhysicalServerStatusPayload("phyS");
-//            result = sender.sendReceive(messagePayload);
-//            System.out.println("result: "+result.toString());
+//            messagePayload = vmc.getPhysicalServerStatusPayload("inga");
+  //          result = sender.sendReceive(messagePayload);
+    //        System.out.println("result: "+result.toString());
 //
 //            messagePayload = vmc.shutdownPhysicalServerPayload("phyS");
 //            result = sender.sendReceive(messagePayload);
 //            System.out.println("result: "+result.toString());
 //
-//            messagePayload = vmc.getVirtualMachineStatusPayload("phy", "vmname");
-//            result = sender.sendReceive(messagePayload);
-//            System.out.println("result: "+result.toString());
+            messagePayload = vmc.getVirtualMachineStatusPayload("inga", "test_vmserver");
+            result = sender.sendReceive(messagePayload);
+            System.out.println("result: "+result.toString());
 //
 //            messagePayload = vmc.shutdownVirtualMachinePayload("phy", "vmname");
 //            result = sender.sendReceive(messagePayload);

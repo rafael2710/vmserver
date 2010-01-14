@@ -21,7 +21,6 @@ import org.apache.axiom.om.OMNamespace;
 import org.libvirt.Connect;
 import org.libvirt.Domain;
 import org.libvirt.DomainInfo;
-import org.libvirt.DomainInfo.DomainState;
 import org.libvirt.LibvirtException;
 import org.libvirt.NodeInfo;
 
@@ -74,7 +73,7 @@ public class VMServer {
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
         ele.clear();
-        String returnText = "Virtual Machine created\nAttributes:\n";
+        String returnText = "SUCESS - Virtual Machine created\nAttributes:\n";
         while(it.hasNext()){
             ele.add((OMElement) it.next());
             returnText = returnText+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
@@ -94,7 +93,7 @@ public class VMServer {
         System.err.println("MigrateVirtualMachine");
         Logger.getLogger(VMServer.class.getName()).log(Level.ALL, "MigrageVirtualMachine");
 
-  //      System.out.println("migrateVM message: "+element.toString());
+        System.out.println("migrateVM message: "+element.toString());
 
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
@@ -152,6 +151,7 @@ public class VMServer {
         element.build();
         element.detach();
         System.out.println("getVirtualMachineStatus message: "+element.toString());
+        Logger.getLogger(VMServer.class.getName()).log(Level.FINE, "DEBUG----DEBUG");
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
         String phyServer = null, vmName = null;
@@ -172,27 +172,27 @@ public class VMServer {
             }
         }
         try {
-            Connect  Conn = new Connect("xen+ssh://"+phyServer+"/", true);
-            Domain domain = Conn.domainLookupByName(vmName);
-            DomainInfo domainInfo = domain.getInfo();
-
-            OMElement value = fac.createOMElement("result", omNs);
-            value.addChild(fac.createOMText(value, "Sucess"));
-            retElement.addChild(value);
-
-            value = fac.createOMElement("memory", omNs);
-            value.addChild(fac.createOMText(value, (new Long(domainInfo.memory).toString())));
-            retElement.addChild(value);
-
-            value = fac.createOMElement("vcpus", omNs);
-            value.addChild(fac.createOMText(value, new Integer(domainInfo.nrVirtCpu).toString()));
-            retElement.addChild(value);
-
-            value = fac.createOMElement("vcpus", omNs);
-            value.addChild(fac.createOMText(value, domainInfo.state.toString()));
-            retElement.addChild(value);
-
-            return retElement;
+            Connect  Conn = new Connect("http://"+phyServer+"/", true);
+//            Domain domain = Conn.domainLookupByName(vmName);
+//            DomainInfo domainInfo = domain.getInfo();
+//
+//            OMElement value = fac.createOMElement("result", omNs);
+//            value.addChild(fac.createOMText(value, "Sucess"));
+//            retElement.addChild(value);
+//
+//            value = fac.createOMElement("memory", omNs);
+//            value.addChild(fac.createOMText(value, (new Long(domainInfo.memory).toString())));
+//            retElement.addChild(value);
+//
+//            value = fac.createOMElement("vcpus", omNs);
+//            value.addChild(fac.createOMText(value, new Integer(domainInfo.nrVirtCpu).toString()));
+//            retElement.addChild(value);
+//
+//            value = fac.createOMElement("vcpus", omNs);
+//            value.addChild(fac.createOMText(value, domainInfo.state.toString()));
+//            retElement.addChild(value);
+//
+//            return retElement;
         } catch (LibvirtException ex) {
             Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
             OMElement value = fac.createOMElement("result", omNs);
@@ -200,6 +200,7 @@ public class VMServer {
             retElement.addChild(value);
             return retElement;
         }
+        return element;
     }
 
     public OMElement getPhysicalServerStatus(OMElement element){
@@ -242,6 +243,11 @@ public class VMServer {
             value.addChild(fac.createOMText(value, new Long(nodeInfo.memory).toString()));
             retElement.addChild(value);
 
+            value = fac.createOMElement("freeMemory", omNs);
+            value.addChild(fac.createOMText(value, new Long(Conn.getFreeMemory()).toString()));
+            retElement.addChild(value);
+            
+
             int domainCount = Conn.numOfDomains();
 
             value = fac.createOMElement("domainCount", omNs);
@@ -276,7 +282,7 @@ public class VMServer {
         String phyServer = null;
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
-        OMElement retElement = fac.createOMElement("shutdownPhysicalServerResponse", omNs);
+        OMElement retElement = fac.createOMElement("shutdownPhysicalServerResponse-ddd", omNs);
 
         while(it.hasNext()){
             ele.add((OMElement) it.next());
@@ -390,7 +396,7 @@ public class VMServer {
     public OMElement createVirtualNetwork(OMElement element){
         element.build();
         element.detach();
-        System.out.println("createVNet message: "+element.toString());
+        System.out.println("createVirtualNetwork message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
