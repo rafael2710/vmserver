@@ -21,7 +21,7 @@ public class VMClient {
     private String URI = "http://vmserver/xsd";
     private String PREFIX = "vsm"; 
 
-    private EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
+    public EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
     //reference need to be changed
 
     /**
