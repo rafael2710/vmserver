@@ -20,7 +20,6 @@ import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.libvirt.Connect;
 import org.libvirt.Domain;
-import org.libvirt.DomainInfo;
 import org.libvirt.LibvirtException;
 import org.libvirt.NodeInfo;
 
