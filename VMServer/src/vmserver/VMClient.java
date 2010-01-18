@@ -282,9 +282,9 @@ public class VMClient {
 //            result = sender.sendReceive(messagePayload);
 //            System.out.println("result: "+result.toString());
 //
-            messagePayload = vmc.getVirtualMachineStatusPayload("inga", "test_vmserver");
-            result = sender.sendReceive(messagePayload);
-            System.out.println("result: "+result.toString());
+  //          messagePayload = vmc.getVirtualMachineStatusPayload("inga", "test_vmserver");
+//            result = sender.sendReceive(messagePayload);
+//            System.out.println("result: "+result.toString());
 //
 //            messagePayload = vmc.shutdownVirtualMachinePayload("phy", "vmname");
 //            result = sender.sendReceive(messagePayload);

@@ -396,6 +396,7 @@ public class VMServer {
         element.build();
         element.detach();
         System.out.println("createVirtualNetwork message: "+element.toString());
+        System.err.println("createVirtualNetwork message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
