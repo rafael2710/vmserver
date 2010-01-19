@@ -34,8 +34,8 @@ public class VMServer {
      */
 
     private Vector<PhysicalServer> phyServers;
-    private String URI = "http://vmserver/xsd";
-    private String PREFIX = "vsm";
+    private String URI = "http://meier.gta.ufrj.br:8080/axis2/services/VMServer/xsd";
+    private String PREFIX = "hxpm";//horizon xen prototype message
     private String DATABASE = "data.txt";
     private String PS_TOKEN = "|";
 //    private String VM_TOKEN = ";";
@@ -394,7 +394,7 @@ public class VMServer {
 
     public OMElement createVirtualNetwork(OMElement element){
         element.build();
-        element.detach();
+        element.detach(); 
         System.out.println("createVirtualNetwork message: "+element.toString());
         System.err.println("createVirtualNetwork message: "+element.toString());
         return element;//throw new UnsupportedOperationException("Not yet implemented");
