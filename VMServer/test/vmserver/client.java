@@ -14,6 +14,10 @@ import org.apache.axis2.client.ServiceClient;
  * @author santos
  */
 public class client {
+    /**
+     * main method of a simple client for the VMServer.
+     * @param args
+     */
     public static void main(String[] args) {
         try {
 
