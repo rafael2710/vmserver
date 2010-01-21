@@ -18,8 +18,8 @@ import org.apache.axis2.client.ServiceClient;
 
 public class VMClient {
 
-    //private String URI = "http://vmserver/xsd";
-    private String URI = "http://meier.gta.ufrj.br:8080/axis2/services/VMServer/xsd";
+    private String URI = "http://vmserver/xsd";
+    //private String URI = "http://meier.gta.ufrj.br:8080/axis2/services/VMServer/xsd";
     private String PREFIX = "hxpm";
 
     public EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
@@ -46,32 +46,32 @@ public class VMClient {
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("createVirtualMachine", omNs);
+        OMElement element = fac.createOMElement("createVirtualMachine", omNs);
         
         // Attributes
 
         // Physical Server IP
         OMElement value = fac.createOMElement("phyServer", omNs);
         value.addChild(fac.createOMText(value, phyServer));
-        method.addChild(value);
+        element.addChild(value);
         // Virtual Machine Name
         value = fac.createOMElement("vmName", omNs);
         value.addChild(fac.createOMText(value, vmName));
-        method.addChild(value);
+        element.addChild(value);
         // Virtual Machine IP Address
         value = fac.createOMElement("vmIP", omNs);
         value.addChild(fac.createOMText(value, vmIP));
-        method.addChild(value);
+        element.addChild(value);
         // Virtual Machine RAM Memory Size
         value = fac.createOMElement("vmRAM", omNs);
         value.addChild(fac.createOMText(value, vmRAM));
-        method.addChild(value);
+        element.addChild(value);
         // Virtual Machine Hard Disk Size
         value = fac.createOMElement("vmDiskSize", omNs);
         value.addChild(fac.createOMText(value, vmDiskSize));
-        method.addChild(value);
+        element.addChild(value);
 
-        return method;
+        return element;
         
     }
 
@@ -135,6 +135,19 @@ public class VMClient {
         value.addChild(fac.createOMText(value, VMName));
         method.addChild(value);
 
+        return method;
+    }
+
+    public OMElement testPayload(String a){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("test", omNs);
+        OMElement value = fac.createOMElement("a", omNs);
+        value.addChild(fac.createOMText(value, a));
+        method.addChild(value);
         return method;
     }
 

@@ -34,7 +34,7 @@ public class VMServer {
      */
 
     private Vector<PhysicalServer> phyServers;
-    private String URI = "http://meier.gta.ufrj.br:8080/axis2/services/VMServer/xsd";
+    private String URI = "http://vmserver/xsd";
     private String PREFIX = "hxpm";//horizon xen prototype message
     private String DATABASE = "data.txt";
     private String PS_TOKEN = "|";
@@ -53,6 +53,10 @@ public class VMServer {
         } catch (FileNotFoundException ex) {
             System.err.println("The file could not be opened or created");
         }
+    }
+
+    public OMElement test(OMElement a){
+        return a;
     }
 
     /**
@@ -81,7 +85,7 @@ public class VMServer {
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         OMElement method = fac.createOMElement("createVirtualMachineResponse", omNs);
-        method.addChild(fac.createOMText(returnText)); 
+        method.addChild(fac.createOMText(returnText));
 
         return method;
     }
@@ -126,9 +130,9 @@ public class VMServer {
             }
         }        
         try {
-            Connect  sConn = new Connect("xen+ssh://"+sourcePhyServer+"/", true);
+            Connect  sConn = new Connect("xen+ssh://"+sourcePhyServer+"/");
             Domain domain = sConn.domainLookupByName(vmName);
-            Connect dConn = new Connect("xen+ssh://"+destPhyServer+"/", true);
+            Connect dConn = new Connect("xen+ssh://"+destPhyServer+"/");
             //Domain newDomain = domain.migrate(dConn, VIR_MIGRATE_LIVE, null, null, 0);
             Domain newDomain = domain.migrate(dConn, live, null, null, 0);
             if(newDomain==null)
