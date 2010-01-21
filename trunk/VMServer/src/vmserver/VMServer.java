@@ -90,6 +90,12 @@ public class VMServer {
         return method;
     }
 
+    /**
+     * Migrate a domain (virtual machine) between physical hosts.
+     * @param element part of a xml with the parameters for the operation
+     * @return an OMElement with the result of the operation
+     */
+
     public OMElement migrateVirtualMachine(OMElement element){
         element.build();
         element.detach();
@@ -150,6 +156,11 @@ public class VMServer {
         return method;
     }
 
+    /**
+     * A service that returns the status of a virtual machine
+     * @param element the names of the virtual machine and the physical server
+     * @return the status of the virtual machine within a XML element
+     */
     public OMElement getVirtualMachineStatus(OMElement element){
         element.build();
         element.detach();
