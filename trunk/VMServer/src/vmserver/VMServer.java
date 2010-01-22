@@ -18,6 +18,7 @@ import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
+import org.apache.commons.logging.LogFactory;
 import org.libvirt.Connect;
 import org.libvirt.Domain;
 import org.libvirt.LibvirtException;
@@ -72,6 +73,8 @@ public class VMServer {
         element.detach();
         System.err.println("createVM message: "+element.toString());
         System.out.println("createVM message: "+element.toString());
+        LogFactory.getLog(getClass());
+        
 
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
@@ -101,6 +104,7 @@ public class VMServer {
         element.detach();
         System.err.println("MigrateVirtualMachine");
         Logger.getLogger(VMServer.class.getName()).log(Level.ALL, "MigrageVirtualMachine");
+
 
         System.out.println("migrateVM message: "+element.toString());
 

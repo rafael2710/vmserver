@@ -22,6 +22,9 @@ public class VMClient {
     //private String URI = "http://meier.gta.ufrj.br:8080/axis2/services/VMServer/xsd";
     private String PREFIX = "hxpm";
 
+    /**
+     * Define the Endpoint Reference for the default client
+     */
     public EndpointReference targetEPR = new EndpointReference("http://localhost:8080/axis2/services/VMServer");
     //reference need to be changed
 
@@ -116,6 +119,12 @@ public class VMClient {
         return method;
     }
 
+    /**
+     * Creates the payload for the message requesting the status of a virtual machine.
+     * @param phyServer the machine that hosts the virtual machine
+     * @param VMName the name of the virtual machine
+     * @return the element with the requested payload
+     */
     public OMElement getVirtualMachineStatusPayload(String phyServer, String VMName){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
@@ -138,6 +147,11 @@ public class VMClient {
         return method;
     }
 
+    /**
+     *
+     * @param a
+     * @return
+     */
     public OMElement testPayload(String a){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
@@ -151,6 +165,12 @@ public class VMClient {
         return method;
     }
 
+    /**
+     * Creates the payload for the message requesting the status of a physical machine
+     * that hosts virtual domains
+     * @param phyServer the name of the physical server
+     * @return the OMElement with the payload
+     */
     public OMElement getPhysicalServerStatusPayload(String phyServer){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
