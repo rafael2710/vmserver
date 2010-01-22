@@ -16,7 +16,6 @@ public class Computer {
     private int RAMSize;
     private int hardDiskSize;
 
-    
 
     // Methods
     /**
