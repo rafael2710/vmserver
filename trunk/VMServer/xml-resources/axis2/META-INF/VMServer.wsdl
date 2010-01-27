@@ -86,6 +86,20 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="sanityTest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="in" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="sanityTestResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="shutdownPhysicalServer">
                 <xs:complexType>
                     <xs:sequence>
@@ -114,20 +128,6 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="test">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="a" nillable="true" type="xs:anyType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="testResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:anyType"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="getPhysicalServerStatusRequest">
@@ -135,12 +135,6 @@
     </wsdl:message>
     <wsdl:message name="getPhysicalServerStatusResponse">
         <wsdl:part name="parameters" element="ns0:getPhysicalServerStatusResponse"/>
-    </wsdl:message>
-    <wsdl:message name="testRequest">
-        <wsdl:part name="parameters" element="ns0:test"/>
-    </wsdl:message>
-    <wsdl:message name="testResponse">
-        <wsdl:part name="parameters" element="ns0:testResponse"/>
     </wsdl:message>
     <wsdl:message name="shutdownVirtualMachineRequest">
         <wsdl:part name="parameters" element="ns0:shutdownVirtualMachine"/>
@@ -178,6 +172,12 @@
     <wsdl:message name="migrateVirtualMachineResponse">
         <wsdl:part name="parameters" element="ns0:migrateVirtualMachineResponse"/>
     </wsdl:message>
+    <wsdl:message name="sanityTestRequest">
+        <wsdl:part name="parameters" element="ns0:sanityTest"/>
+    </wsdl:message>
+    <wsdl:message name="sanityTestResponse">
+        <wsdl:part name="parameters" element="ns0:sanityTestResponse"/>
+    </wsdl:message>
     <wsdl:message name="destroyVirtualMachineRequest">
         <wsdl:part name="parameters" element="ns0:destroyVirtualMachine"/>
     </wsdl:message>
@@ -188,10 +188,6 @@
         <wsdl:operation name="getPhysicalServerStatus">
             <wsdl:input message="axis2:getPhysicalServerStatusRequest" wsaw:Action="urn:getPhysicalServerStatus"/>
             <wsdl:output message="axis2:getPhysicalServerStatusResponse" wsaw:Action="urn:getPhysicalServerStatusResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="test">
-            <wsdl:input message="axis2:testRequest" wsaw:Action="urn:test"/>
-            <wsdl:output message="axis2:testResponse" wsaw:Action="urn:testResponse"/>
         </wsdl:operation>
         <wsdl:operation name="shutdownVirtualMachine">
             <wsdl:input message="axis2:shutdownVirtualMachineRequest" wsaw:Action="urn:shutdownVirtualMachine"/>
@@ -217,6 +213,10 @@
             <wsdl:input message="axis2:migrateVirtualMachineRequest" wsaw:Action="urn:migrateVirtualMachine"/>
             <wsdl:output message="axis2:migrateVirtualMachineResponse" wsaw:Action="urn:migrateVirtualMachineResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="sanityTest">
+            <wsdl:input message="axis2:sanityTestRequest" wsaw:Action="urn:sanityTest"/>
+            <wsdl:output message="axis2:sanityTestResponse" wsaw:Action="urn:sanityTestResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="destroyVirtualMachine">
             <wsdl:input message="axis2:destroyVirtualMachineRequest" wsaw:Action="urn:destroyVirtualMachine"/>
             <wsdl:output message="axis2:destroyVirtualMachineResponse" wsaw:Action="urn:destroyVirtualMachineResponse"/>
@@ -226,15 +226,6 @@
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="getPhysicalServerStatus">
             <soap:operation soapAction="urn:getPhysicalServerStatus" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="test">
-            <soap:operation soapAction="urn:test" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -296,6 +287,15 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="sanityTest">
+            <soap:operation soapAction="urn:sanityTest" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="destroyVirtualMachine">
             <soap:operation soapAction="urn:destroyVirtualMachine" style="document"/>
             <wsdl:input>
@@ -310,15 +310,6 @@
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="getPhysicalServerStatus">
             <soap12:operation soapAction="urn:getPhysicalServerStatus" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="test">
-            <soap12:operation soapAction="urn:test" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -380,6 +371,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="sanityTest">
+            <soap12:operation soapAction="urn:sanityTest" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="destroyVirtualMachine">
             <soap12:operation soapAction="urn:destroyVirtualMachine" style="document"/>
             <wsdl:input>
@@ -399,15 +399,6 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="getPhysicalServerStatus"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="test">
-            <http:operation location="VMServer/test"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="test"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="test"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="shutdownVirtualMachine">
@@ -462,6 +453,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="migrateVirtualMachine"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="sanityTest">
+            <http:operation location="VMServer/sanityTest"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="sanityTest"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="sanityTest"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="destroyVirtualMachine">

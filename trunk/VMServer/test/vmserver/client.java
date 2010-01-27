@@ -20,13 +20,9 @@ public class client {
      */
     public static void main(String[] args) {
         try {
-
-
             VMClient vmc = new VMClient();
             // set options to send message
             Options options = new Options();
-            vmc.targetEPR.setAddress("http://meier:8080/axis2/services/VMServer");
-            vmc.targetEPR.setAddress("http://localhost:8080/axis2/services/VMServer");
             options.setTo(vmc.targetEPR);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             // create client
@@ -35,13 +31,12 @@ public class client {
 
             // creating message payload
             OMElement messagePayload = vmc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
+            messagePayload = vmc.sanityTestPayload("a simple test string");
+            System.out.println("DEBUG: "+messagePayload.toString());
             // send message and wait for the server response
-
-               messagePayload = vmc.testPayload("abcdef");
-
             OMElement result = sender.sendReceive(messagePayload);
             // print some output
-            System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
+            System.out.println("result: "+result.getFirstElement().getFirstElement().toString());
 
  //           messagePayload = vmc.migrateVirtualMachinePayload("engenhao","inga","test_vmserver","true");
    ///         result = sender.sendReceive(messagePayload);

@@ -56,8 +56,9 @@ public class VMServer {
         }
     }
 
-    public OMElement test(OMElement a){
-        return a;
+    public OMElement sanityTest(OMElement in){
+        OMElement ret = in.cloneOMElement();
+        return ret;
     }
 
     /**
