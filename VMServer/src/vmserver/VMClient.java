@@ -152,13 +152,13 @@ public class VMClient {
      * @param a
      * @return
      */
-    public OMElement testPayload(String a){
+    public OMElement sanityTestPayload(String a){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 
         // Set the namespace of the messages
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
-        OMElement method = fac.createOMElement("test", omNs);
+        OMElement method = fac.createOMElement("sanityTest", omNs);
         OMElement value = fac.createOMElement("a", omNs);
         value.addChild(fac.createOMText(value, a));
         method.addChild(value);
