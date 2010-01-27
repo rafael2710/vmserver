@@ -36,7 +36,8 @@ public class VMServer {
 
     private Vector<PhysicalServer> phyServers;
     private String URI = "http://vmserver/xsd";
-    private String PREFIX = "hxpm";//horizon xen prototype message
+    //private String PREFIX = "hxpm";//horizon xen prototype message
+    private String PREFIX = "";
     private String DATABASE = "data.txt";
     private String PS_TOKEN = "|";
 //    private String VM_TOKEN = ";";
