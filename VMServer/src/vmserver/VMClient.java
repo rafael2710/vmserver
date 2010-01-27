@@ -20,7 +20,8 @@ public class VMClient {
 
     private String URI = "http://vmserver/xsd";
     //private String URI = "http://meier.gta.ufrj.br:8080/axis2/services/VMServer/xsd";
-    private String PREFIX = "hxpm";
+    private String PREFIX = "";
+    //private String PREFIX = "hxpm";//horizon xen prototype message
 
     /**
      * Define the Endpoint Reference for the default client
