@@ -160,7 +160,7 @@ public class VMClient {
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         // Set the required operation
         OMElement method = fac.createOMElement("sanityTest", omNs);
-        OMElement value = fac.createOMElement("a", omNs);
+        OMElement value = fac.createOMElement("testString", omNs);
         value.addChild(fac.createOMText(value, a));
         method.addChild(value);
         return method;
