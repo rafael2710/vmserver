@@ -21,6 +21,7 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.commons.logging.LogFactory;
 import org.libvirt.Connect;
 import org.libvirt.Domain;
+import org.libvirt.DomainInfo;
 import org.libvirt.LibvirtException;
 import org.libvirt.NodeInfo;
 
@@ -122,31 +123,31 @@ public class VMServer {
             //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
             if(ele.lastElement().getLocalName().equals("sourcePhyServer")){
                 sourcePhyServer = ele.lastElement().getText();
-                att = "sourcePhyServer: "+sourcePhyServer+"\n";
+                att = att + "sourcePhyServer: "+sourcePhyServer+"\n";
             }
             if(ele.lastElement().getLocalName().equals("destPhyServer")){
                 destPhyServer = ele.lastElement().getText();
-                att = "destPhyServer: "+destPhyServer+"\n";
+                att = att + "destPhyServer: "+destPhyServer+"\n";
             }
             if(ele.lastElement().getLocalName().equals("vmName")){
                 vmName = ele.lastElement().getText();
-                att = "vmName: "+vmName+"\n";
+                att = att + "vmName: "+vmName+"\n";
             }
             if(ele.lastElement().getLocalName().equals("live")){
                 if(ele.lastElement().getText().equals("true")){
                     live = 1;
-                    att = "live: true\n";
+                    att = att + "live: true\n";
                 }
                 else
-                    att = "live: false\n";
+                    att = att + "live: false\n";
             }
         }        
         try {
-            Connect  sConn = new Connect("xen+ssh://"+sourcePhyServer+"/");
+            Connect sConn = new Connect("xen+ssh://root@"+sourcePhyServer+"/");
             Domain domain = sConn.domainLookupByName(vmName);
-            Connect dConn = new Connect("xen+ssh://"+destPhyServer+"/");
+            Connect dConn = new Connect("xen+ssh://root@"+destPhyServer+"/");
             //Domain newDomain = domain.migrate(dConn, VIR_MIGRATE_LIVE, null, null, 0);
-            Domain newDomain = domain.migrate(dConn, live, null, null, 0);
+            Domain newDomain = domain.migrate(dConn, 1, null, null, 0);
             if(newDomain==null)
                 returnText = "ERROR - The Domain could not be migrated\nAttributes:\n";
         } catch (LibvirtException ex) {
@@ -192,27 +193,27 @@ public class VMServer {
             }
         }
         try {
-            Connect  Conn = new Connect("http://"+phyServer+"/", true);
-//            Domain domain = Conn.domainLookupByName(vmName);
-//            DomainInfo domainInfo = domain.getInfo();
-//
-//            OMElement value = fac.createOMElement("result", omNs);
-//            value.addChild(fac.createOMText(value, "Sucess"));
-//            retElement.addChild(value);
-//
-//            value = fac.createOMElement("memory", omNs);
-//            value.addChild(fac.createOMText(value, (new Long(domainInfo.memory).toString())));
-//            retElement.addChild(value);
-//
-//            value = fac.createOMElement("vcpus", omNs);
-//            value.addChild(fac.createOMText(value, new Integer(domainInfo.nrVirtCpu).toString()));
-//            retElement.addChild(value);
-//
-//            value = fac.createOMElement("vcpus", omNs);
-//            value.addChild(fac.createOMText(value, domainInfo.state.toString()));
-//            retElement.addChild(value);
-//
-//            return retElement;
+            Connect  Conn = new Connect("xen+ssh://root@"+phyServer+"/");
+            Domain domain = Conn.domainLookupByName(vmName);
+            DomainInfo domainInfo = domain.getInfo();
+
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Sucess"));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("memory", omNs);
+            value.addChild(fac.createOMText(value, (new Long(domainInfo.memory).toString())));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("vcpus", omNs);
+            value.addChild(fac.createOMText(value, new Integer(domainInfo.nrVirtCpu).toString()));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("state", omNs);
+            value.addChild(fac.createOMText(value, domainInfo.state.toString()));
+            retElement.addChild(value);
+
+            return retElement;
         } catch (LibvirtException ex) {
             Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
             OMElement value = fac.createOMElement("result", omNs);
@@ -220,7 +221,6 @@ public class VMServer {
             retElement.addChild(value);
             return retElement;
         }
-        return element;
     }
 
     public OMElement getPhysicalServerStatus(OMElement element){
@@ -244,7 +244,7 @@ public class VMServer {
             }
         }
         try {
-            Connect  Conn = new Connect("xen+ssh://"+phyServer+"/", true);
+            Connect Conn = new Connect("xen+ssh://root@"+phyServer+"/");
             NodeInfo nodeInfo = Conn.nodeInfo();
 
             OMElement value = fac.createOMElement("result", omNs);
@@ -266,7 +266,10 @@ public class VMServer {
             value = fac.createOMElement("freeMemory", omNs);
             value.addChild(fac.createOMText(value, new Long(Conn.getFreeMemory()).toString()));
             retElement.addChild(value);
-            
+
+            value = fac.createOMElement("hostName", omNs);
+            value.addChild(fac.createOMText(value, Conn.getHostName()));
+            retElement.addChild(value);
 
             int domainCount = Conn.numOfDomains();
 
@@ -281,12 +284,13 @@ public class VMServer {
                 value.addChild(fac.createOMText(value, Conn.domainLookupByID(domains[i]).getName()));
                 retElement.addChild(value);
             }
+            Conn.close();
 
             return retElement;
         } catch (LibvirtException ex) {
             Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
             OMElement value = fac.createOMElement("result", omNs);
-            value.addChild(fac.createOMText(value, "Error: "+ex.getMessage()));
+            value.addChild(fac.createOMText(value, "Error: "+ex.toString()));
             retElement.addChild(value);
             return retElement;
         }
