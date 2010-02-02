@@ -201,16 +201,44 @@ public class VMServer {
             value.addChild(fac.createOMText(value, "Sucess"));
             retElement.addChild(value);
 
+            value = fac.createOMElement("getName()", omNs);
+            value.addChild(fac.createOMText(value, (new Long(domain.getName()).toString())));
+            retElement.addChild(value);
+
             value = fac.createOMElement("memory", omNs);
             value.addChild(fac.createOMText(value, (new Long(domainInfo.memory).toString())));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("maxMem", omNs);
+            value.addChild(fac.createOMText(value, (new Long(domainInfo.maxMem).toString())));
+            retElement.addChild(value);
+            
+            value = fac.createOMElement("getMaxMemory", omNs);
+            value.addChild(fac.createOMText(value, (new Long(domain.getMaxMemory()).toString())));
             retElement.addChild(value);
 
             value = fac.createOMElement("vcpus", omNs);
             value.addChild(fac.createOMText(value, new Integer(domainInfo.nrVirtCpu).toString()));
             retElement.addChild(value);
 
+            value = fac.createOMElement("getMaxVcpus", omNs);
+            value.addChild(fac.createOMText(value, (new Long(domain.getMaxVcpus()).toString())));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("cpuTime", omNs);
+            value.addChild(fac.createOMText(value, (new Long(domainInfo.cpuTime).toString())));
+            retElement.addChild(value);
+
             value = fac.createOMElement("state", omNs);
             value.addChild(fac.createOMText(value, domainInfo.state.toString()));
+            retElement.addChild(value);
+            
+            value = fac.createOMElement("getSchedulerParameters", omNs);
+            value.addChild(fac.createOMText(value, domain.getSchedulerParameters().toString()));
+            retElement.addChild(value);
+
+            value = fac.createOMElement("getSchedulerType", omNs);
+            value.addChild(fac.createOMText(value, domain.getSchedulerType().toString()));
             retElement.addChild(value);
 
             return retElement;
