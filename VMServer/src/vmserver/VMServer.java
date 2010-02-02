@@ -83,11 +83,104 @@ public class VMServer {
         Vector <OMElement> ele = new Vector();
         ele.clear();
         String returnText = "SUCESS - Virtual Machine created\nAttributes:\n";
+        String att = "";
+        String phyServer="", vmName="", vmRAM ="", vmIP="";
         while(it.hasNext()){
             ele.add((OMElement) it.next());
-            returnText = returnText+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            //returnText = returnText+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
+            if(ele.lastElement().getLocalName().equals("phyServer")){
+                phyServer = ele.lastElement().getText();
+                att = att + "sourcePhyServer: "+phyServer+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmName")){
+                vmName = ele.lastElement().getText();
+                att = att + "vmName: "+vmName+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmIP")){
+                vmIP = ele.lastElement().getText();
+                att = att + "vmIP: "+vmIP+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmRAM")){
+                vmRAM = ele.lastElement().getText();
+                att = att + "vmRAM: "+vmRAM+"\n";
+            }
+            //TODO: pegar outros parametros da maquina virtual
         }
 
+        // Criar xml de configuração
+        /*
+            <domain type='xen'>
+              <name>debian</name>
+              <os>
+                <type>linux</type>
+                <kernel>/boot/vmlinuz-2.6.26-2-xen-686</kernel>
+                <initrd>/boot/initrd.img-2.6.26-2-xen-686</initrd>
+                <cmdline> kickstart=http://example.com/myguest.ks </cmdline>
+              </os>
+              <memory>65536</memory>
+              <vcpu>1</vcpu>
+              <devices>
+                <disk type='file'>
+                  <source file='/home/xen/domains/default/disk.img'/>
+                  <target dev='/dev/hda2 ro'/>
+                </disk>
+                <interface type='bridge'>
+                  <source bridge='xenbr0'/>
+                  <mac address='aa:00:00:00:00:11'/>
+                  <script path='/etc/xen/scripts/vif-bridge'/>
+                </interface>
+                <graphics type='vnc' port='-1'/>
+                <console tty='/dev/pts/5'/>
+              </devices>
+            </domain>
+
+                    */
+
+        /////////////////////////////////////////
+
+        try {
+            Connect Conn = new Connect("xen+ssh://root@" + phyServer + "/");
+            Domain newdomain = Conn.domainCreateXML(
+                "<domain type='xen'>" +
+                    "<name>"+vmName+"</name>" +
+                    "<os>" +
+                        "<type>linux</type>" +
+                        "<kernel>/boot/vmlinuz-2.6.26-2-xen-686</kernel>" +
+                        "<initrd>/boot/initrd.img-2.6.26-2-xen-686</initrd>" +
+                        "<cmdline> kickstart=http://example.com/myguest.ks </cmdline>" +
+                    "</os>" +
+                    "<memory>"+vmRAM+"</memory>" +
+                    "<vcpu>1</vcpu>" +
+                    "<on_poweroff>destroy</on_poweroff>" +
+                    "<on_reboot>restart</on_reboot>" +
+                    "<on_crash>restart</on_crash>" +
+                    "<devices>" +
+                        "<disk type='file'>" +
+                            "<source file='/home/xen/domains/default/disk.img'/>" +
+                            "<target dev='xvda1'/>" +
+                            "<shareable/>" +
+                        "</disk>"+
+                        "<disk type='file'>" +
+                            "<source file='/home/xen/domains/default/swap.img'/>" +
+                            "<target dev='xvda2'/>" +
+                            "<shareable/>" +
+                        "</disk>"+
+                        "<interface type='bridge'>" +
+                            "<source bridge='xenbr0'/>" +
+                            "<mac address='aa:00:00:00:00:11'/>" +
+                            "<script path='/etc/xen/scripts/vif-bridge'/>" +
+                        "</interface>" +
+                       "<console tty='/dev/pts/8'/>"+
+                    "</devices>" +
+                "</domain>", 0);
+
+
+        } catch (LibvirtException ex) {
+            returnText = "ERROR - The Domain could not be created - Exception: "+ex.getMessage()+"\nAttributes:\n";
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        returnText = returnText + att;
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         OMElement method = fac.createOMElement("createVirtualMachineResponse", omNs);
@@ -201,8 +294,8 @@ public class VMServer {
             value.addChild(fac.createOMText(value, "Sucess"));
             retElement.addChild(value);
 
-            value = fac.createOMElement("getName()", omNs);
-            value.addChild(fac.createOMText(value, (new Long(domain.getName()).toString())));
+            value = fac.createOMElement("getName", omNs);
+            value.addChild(fac.createOMText(value, domain.getName()));
             retElement.addChild(value);
 
             value = fac.createOMElement("memory", omNs);
@@ -212,7 +305,7 @@ public class VMServer {
             value = fac.createOMElement("maxMem", omNs);
             value.addChild(fac.createOMText(value, (new Long(domainInfo.maxMem).toString())));
             retElement.addChild(value);
-            
+
             value = fac.createOMElement("getMaxMemory", omNs);
             value.addChild(fac.createOMText(value, (new Long(domain.getMaxMemory()).toString())));
             retElement.addChild(value);
@@ -232,14 +325,14 @@ public class VMServer {
             value = fac.createOMElement("state", omNs);
             value.addChild(fac.createOMText(value, domainInfo.state.toString()));
             retElement.addChild(value);
-            
-            value = fac.createOMElement("getSchedulerParameters", omNs);
-            value.addChild(fac.createOMText(value, domain.getSchedulerParameters().toString()));
-            retElement.addChild(value);
 
-            value = fac.createOMElement("getSchedulerType", omNs);
-            value.addChild(fac.createOMText(value, domain.getSchedulerType().toString()));
-            retElement.addChild(value);
+     //       value = fac.createOMElement("getSchedulerParameters", omNs);
+   //         value.addChild(fac.createOMText(value, domain.getSchedulerParameters().toString()));
+ //           retElement.addChild(value);
+
+//            value = fac.createOMElement("getSchedulerType", omNs);
+//            value.addChild(fac.createOMText(value, domain.getSchedulerType().toString()));
+//            retElement.addChild(value);
 
             return retElement;
         } catch (LibvirtException ex) {
