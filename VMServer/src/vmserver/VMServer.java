@@ -18,7 +18,6 @@ import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.commons.logging.LogFactory;
 import org.libvirt.Connect;
 import org.libvirt.Domain;
 import org.libvirt.DomainInfo;
@@ -93,7 +92,7 @@ public class VMServer {
             //returnText = returnText+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
             if(ele.lastElement().getLocalName().equals("phyServer")){
                 phyServer = ele.lastElement().getText();
-                att = att + "sourcePhyServer: "+phyServer+"\n";
+                att = att + "phyServer: "+phyServer+"\n";
             }
             if(ele.lastElement().getLocalName().equals("vmName")){
                 vmName = ele.lastElement().getText();
@@ -110,7 +109,7 @@ public class VMServer {
             //TODO: pegar outros parametros da maquina virtual
         }
         try {
-            if(!createVirtualMachine(phyServer, vmName, vmRAM)){
+            if(!createVirtualMachine(phyServer, vmName, vmRAM, vmIP)){
                 returnText = "ERROR - The Domain could not be created - \nAttributes:\n";
             }
         } catch (LibvirtException ex) {
@@ -127,7 +126,7 @@ public class VMServer {
         return method;
     }
 
-    boolean createVirtualMachine(String phyServer, String vmName, String vmRAM) throws LibvirtException{
+    boolean createVirtualMachine(String phyServer, String vmName, String vmRAM, String vmIP) throws LibvirtException{
         Connect Conn = new Connect("xen+ssh://root@" + phyServer + "/");
         Domain newdomain = Conn.domainCreateXML(
             "<domain type='xen'>" +
@@ -136,7 +135,8 @@ public class VMServer {
                     "<type>linux</type>" +
                     "<kernel>/boot/vmlinuz-2.6.26-2-xen-686</kernel>" +
                     "<initrd>/boot/initrd.img-2.6.26-2-xen-686</initrd>" +
-                    "<cmdline> kickstart=http://example.com/myguest.ks </cmdline>" +
+                    "<cmdline>root=/dev/xvda1 ro</cmdline>" +
+//                      "<cmdline>root=/dev/xvda1 ro console=hvc0</cmdline>" +
                 "</os>" +
                 "<memory>"+vmRAM+"</memory>" +
                 "<vcpu>1</vcpu>" +
@@ -144,22 +144,28 @@ public class VMServer {
                 "<on_reboot>restart</on_reboot>" +
                 "<on_crash>restart</on_crash>" +
                 "<devices>" +
-                    "<disk type='file'>" +
-                        "<source file='/home/xen/domains/default/disk.img'/>" +
+                    "<disk type='file' device='disk'>" +
+                        "<source file='/home/xen/domains/default/disk.img' />" +
                         "<target dev='xvda1'/>" +
                         "<shareable/>" +
                     "</disk>"+
-                    "<disk type='file'>" +
+                    "<disk type='file' device='disk'>" +
                         "<source file='/home/xen/domains/default/swap.img'/>" +
                         "<target dev='xvda2'/>" +
                         "<shareable/>" +
                     "</disk>"+
                     "<interface type='bridge'>" +
                         "<source bridge='xenbr0'/>" +
-                        "<mac address='aa:00:00:00:00:11'/>" +
+                        "<ip address='"+ vmIP +"' netmask='255.255.255.0' />" +
+                        "<mac address='aa:00:00:00:00:11'/>" + // TODO: alterar automaticamente endereco MAC
                         "<script path='/etc/xen/scripts/vif-bridge'/>" +
                     "</interface>" +
-                   "<console tty='/dev/pts/8'/>"+
+//                   "<console tty='/dev/hvc0'/>"+
+ //                   "<console type='pty'>" +
+   //                     "<target port='0'/>" +
+     //               "</console>" +
+       //             "<input type='mouse' bus='xen'/>" +
+  //                  "<graphics type='vnc' port='-1' autoport='yes' listen='0.0.0.0'/>" +
                 "</devices>" +
             "</domain>", 0);
         if(newdomain==null){
@@ -215,12 +221,7 @@ public class VMServer {
             }
         }        
         try {
-            Connect sConn = new Connect("xen+ssh://root@"+sourcePhyServer+"/");
-            Domain domain = sConn.domainLookupByName(vmName);
-            Connect dConn = new Connect("xen+ssh://root@"+destPhyServer+"/");
-            //Domain newDomain = domain.migrate(dConn, VIR_MIGRATE_LIVE, null, null, 0);
-            Domain newDomain = domain.migrate(dConn, 1, null, null, 0);
-            if(newDomain==null)
+            if(!migrateVirtualMachine(sourcePhyServer, destPhyServer, vmName, live))
                 returnText = "ERROR - The Domain could not be migrated\nAttributes:\n";
         } catch (LibvirtException ex) {
             Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -233,6 +234,17 @@ public class VMServer {
         method.addChild(fac.createOMText(returnText));
         
         return method;
+    }
+
+    boolean migrateVirtualMachine(String sourcePhyServer, String destPhyServer, String vmName, int live) throws LibvirtException{
+        Connect sConn = new Connect("xen+ssh://root@"+sourcePhyServer+"/");
+        Domain domain = sConn.domainLookupByName(vmName);
+        Connect dConn = new Connect("xen+ssh://root@"+destPhyServer+"/");
+        //Domain newDomain = domain.migrate(dConn, VIR_MIGRATE_LIVE, null, null, 0);
+        Domain newDomain = domain.migrate(dConn, 1, null, null, 0);
+        if(newDomain==null)
+            return false;
+        return true;
     }
 
     /**
@@ -521,7 +533,6 @@ public class VMServer {
         element.build();
         element.detach(); 
         System.out.println("createVirtualNetwork message: "+element.toString());
-        System.err.println("createVirtualNetwork message: "+element.toString());
 
         String vmRAM = "65536";
 
@@ -557,7 +568,7 @@ public class VMServer {
         int i;
         for(i=0;i<nodeCount;i++){
             try {
-                if (!createVirtualMachine(phyServerList.elementAt(i), vmNameList.elementAt(i), vmRAM)) {
+                if (!createVirtualMachine(phyServerList.elementAt(i), vmNameList.elementAt(i), vmRAM, "")) { //TODO: autogenerate IPs
                     returnText = "ERROR - Virtual Network could not be created\nAttributes:\n";
                 }
             } catch (LibvirtException ex) {
