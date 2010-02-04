@@ -58,6 +58,12 @@ public class VMServer {
         }
     }
 
+    /**
+     * A simple sanity test for the server of virutal machines
+     * 
+     * @param in a xml element
+     * @return copy of the only input
+     */
     public OMElement sanityTest(OMElement in){
         OMElement ret = in.cloneOMElement();
         return ret;
@@ -74,10 +80,7 @@ public class VMServer {
     public OMElement createVirtualMachine(OMElement element){
         element.build();
         element.detach();
-        System.err.println("createVM message: "+element.toString());
-        System.out.println("createVM message: "+element.toString());
-        LogFactory.getLog(getClass());
-        
+        System.err.println("createVM message: "+element.toString());        
 
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
@@ -106,79 +109,14 @@ public class VMServer {
             }
             //TODO: pegar outros parametros da maquina virtual
         }
-
-        // Criar xml de configuração
-        /*
-            <domain type='xen'>
-              <name>debian</name>
-              <os>
-                <type>linux</type>
-                <kernel>/boot/vmlinuz-2.6.26-2-xen-686</kernel>
-                <initrd>/boot/initrd.img-2.6.26-2-xen-686</initrd>
-                <cmdline> kickstart=http://example.com/myguest.ks </cmdline>
-              </os>
-              <memory>65536</memory>
-              <vcpu>1</vcpu>
-              <devices>
-                <disk type='file'>
-                  <source file='/home/xen/domains/default/disk.img'/>
-                  <target dev='/dev/hda2 ro'/>
-                </disk>
-                <interface type='bridge'>
-                  <source bridge='xenbr0'/>
-                  <mac address='aa:00:00:00:00:11'/>
-                  <script path='/etc/xen/scripts/vif-bridge'/>
-                </interface>
-                <graphics type='vnc' port='-1'/>
-                <console tty='/dev/pts/5'/>
-              </devices>
-            </domain>
-
-                    */
-
-        /////////////////////////////////////////
-
         try {
-            Connect Conn = new Connect("xen+ssh://root@" + phyServer + "/");
-            Domain newdomain = Conn.domainCreateXML(
-                "<domain type='xen'>" +
-                    "<name>"+vmName+"</name>" +
-                    "<os>" +
-                        "<type>linux</type>" +
-                        "<kernel>/boot/vmlinuz-2.6.26-2-xen-686</kernel>" +
-                        "<initrd>/boot/initrd.img-2.6.26-2-xen-686</initrd>" +
-                        "<cmdline> kickstart=http://example.com/myguest.ks </cmdline>" +
-                    "</os>" +
-                    "<memory>"+vmRAM+"</memory>" +
-                    "<vcpu>1</vcpu>" +
-                    "<on_poweroff>destroy</on_poweroff>" +
-                    "<on_reboot>restart</on_reboot>" +
-                    "<on_crash>restart</on_crash>" +
-                    "<devices>" +
-                        "<disk type='file'>" +
-                            "<source file='/home/xen/domains/default/disk.img'/>" +
-                            "<target dev='xvda1'/>" +
-                            "<shareable/>" +
-                        "</disk>"+
-                        "<disk type='file'>" +
-                            "<source file='/home/xen/domains/default/swap.img'/>" +
-                            "<target dev='xvda2'/>" +
-                            "<shareable/>" +
-                        "</disk>"+
-                        "<interface type='bridge'>" +
-                            "<source bridge='xenbr0'/>" +
-                            "<mac address='aa:00:00:00:00:11'/>" +
-                            "<script path='/etc/xen/scripts/vif-bridge'/>" +
-                        "</interface>" +
-                       "<console tty='/dev/pts/8'/>"+
-                    "</devices>" +
-                "</domain>", 0);
-
-
+            if(!createVirtualMachine(phyServer, vmName, vmRAM)){
+                returnText = "ERROR - The Domain could not be created - \nAttributes:\n";
+            }
         } catch (LibvirtException ex) {
             returnText = "ERROR - The Domain could not be created - Exception: "+ex.getMessage()+"\nAttributes:\n";
-            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+               
 
         returnText = returnText + att;
         OMFactory fac = OMAbstractFactory.getOMFactory();
@@ -187,6 +125,47 @@ public class VMServer {
         method.addChild(fac.createOMText(returnText));
 
         return method;
+    }
+
+    boolean createVirtualMachine(String phyServer, String vmName, String vmRAM) throws LibvirtException{
+        Connect Conn = new Connect("xen+ssh://root@" + phyServer + "/");
+        Domain newdomain = Conn.domainCreateXML(
+            "<domain type='xen'>" +
+                "<name>"+vmName+"</name>" +
+                "<os>" +
+                    "<type>linux</type>" +
+                    "<kernel>/boot/vmlinuz-2.6.26-2-xen-686</kernel>" +
+                    "<initrd>/boot/initrd.img-2.6.26-2-xen-686</initrd>" +
+                    "<cmdline> kickstart=http://example.com/myguest.ks </cmdline>" +
+                "</os>" +
+                "<memory>"+vmRAM+"</memory>" +
+                "<vcpu>1</vcpu>" +
+                "<on_poweroff>destroy</on_poweroff>" +
+                "<on_reboot>restart</on_reboot>" +
+                "<on_crash>restart</on_crash>" +
+                "<devices>" +
+                    "<disk type='file'>" +
+                        "<source file='/home/xen/domains/default/disk.img'/>" +
+                        "<target dev='xvda1'/>" +
+                        "<shareable/>" +
+                    "</disk>"+
+                    "<disk type='file'>" +
+                        "<source file='/home/xen/domains/default/swap.img'/>" +
+                        "<target dev='xvda2'/>" +
+                        "<shareable/>" +
+                    "</disk>"+
+                    "<interface type='bridge'>" +
+                        "<source bridge='xenbr0'/>" +
+                        "<mac address='aa:00:00:00:00:11'/>" +
+                        "<script path='/etc/xen/scripts/vif-bridge'/>" +
+                    "</interface>" +
+                   "<console tty='/dev/pts/8'/>"+
+                "</devices>" +
+            "</domain>", 0);
+        if(newdomain==null){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -543,6 +522,52 @@ public class VMServer {
         element.detach(); 
         System.out.println("createVirtualNetwork message: "+element.toString());
         System.err.println("createVirtualNetwork message: "+element.toString());
+
+        String vmRAM = "65536";
+
+        //<vsm:createVNet xmlns:vsm="http://vmserver/xsd"><vsm:nodeCount>3</vsm:nodeCount>
+        //<vsm:phyServer>phyS_1</vsm:phyServer><vsm:phyServer>phyS_2</vsm:phyServer>
+        //<vsm:phyServer>phyS_3</vsm:phyServer><vsm:VMName>vm_1</vsm:VMName>
+        //<vsm:VMName>vm_2</vsm:VMName><vsm:VMName>vm_3</vsm:VMName></vsm:createVNet>
+
+        Iterator it = element.getChildElements();
+        Vector <OMElement> ele = new Vector();
+        ele.clear();
+        String returnText = "SUCESS - Virtual Network created\nAttributes:\n";
+        String att = "";
+        //String phyServer="", vmName="", vmRAM ="", vmIP="";
+        int nodeCount=0;
+        Vector<String> phyServerList = new Vector();
+        Vector<String> vmNameList = new Vector();
+        while(it.hasNext()){
+            ele.add((OMElement) it.next());
+            if(ele.lastElement().getLocalName().equals("nodeCount")){
+                nodeCount = new Integer(ele.lastElement().getText());
+                att = att + "nodeCount: "+nodeCount+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("phyServer")){
+                phyServerList.add(ele.lastElement().getText());
+                att = att + "phyServerList: "+phyServerList.lastElement()+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("VMName")){
+                vmNameList.add(ele.lastElement().getText());
+                att = att + "vmNameList: "+vmNameList.lastElement()+"\n";
+            }
+        }
+        int i;
+        for(i=0;i<nodeCount;i++){
+            try {
+                if (!createVirtualMachine(phyServerList.elementAt(i), vmNameList.elementAt(i), vmRAM)) {
+                    returnText = "ERROR - Virtual Network could not be created\nAttributes:\n";
+                }
+            } catch (LibvirtException ex) {
+                returnText = "ERROR - Virtual Network could not be created - Exception: "+ex.getMessage()+"\nAttributes:\n";
+                Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //virtual machines created
+        //TODO: Configurar rede virtual
+
         return element;//throw new UnsupportedOperationException("Not yet implemented");
     }
 
