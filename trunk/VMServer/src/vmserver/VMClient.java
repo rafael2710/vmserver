@@ -252,8 +252,8 @@ public class VMClient {
         return method;
     }
 
-    public OMElement createVirtualNetworkPayload(Vector<String> phyServers, Vector<String> VMNames) throws Exception{
-        if(phyServers.size()!=VMNames.size()){
+    public OMElement createVirtualNetworkPayload(Vector<String> phyServers, Vector<String> VMNames, Vector<String> IPs, Vector<String> RAMs) throws Exception{
+        if(phyServers.size()!=VMNames.size()||phyServers.size()!=IPs.size()||RAMs.size()!=IPs.size()){
             throw new Exception("Vectors sizes do not match!");
         }
         int i = 0;
@@ -279,6 +279,18 @@ public class VMClient {
         for(i=0;i<phyServers.size();i++){
             value = fac.createOMElement("VMName", omNs);
             value.addChild(fac.createOMText(value, VMNames.elementAt(i)));
+            method.addChild(value);
+        }
+
+        for(i=0;i<phyServers.size();i++){
+            value = fac.createOMElement("vmIP", omNs);
+            value.addChild(fac.createOMText(value, IPs.elementAt(i)));
+            method.addChild(value);
+        }
+
+        for(i=0;i<phyServers.size();i++){
+            value = fac.createOMElement("vmRAM", omNs);
+            value.addChild(fac.createOMText(value, RAMs.elementAt(i)));
             method.addChild(value);
         }
 

@@ -79,8 +79,6 @@ public class VMServer {
     public OMElement createVirtualMachine(OMElement element){
         element.build();
         element.detach();
-        System.err.println("createVM message: "+element.toString());        
-
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
         ele.clear();
@@ -89,7 +87,6 @@ public class VMServer {
         String phyServer="", vmName="", vmRAM ="", vmIP="";
         while(it.hasNext()){
             ele.add((OMElement) it.next());
-            //returnText = returnText+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
             if(ele.lastElement().getLocalName().equals("phyServer")){
                 phyServer = ele.lastElement().getText();
                 att = att + "phyServer: "+phyServer+"\n";
@@ -115,18 +112,24 @@ public class VMServer {
         } catch (LibvirtException ex) {
             returnText = "ERROR - The Domain could not be created - Exception: "+ex.getMessage()+"\nAttributes:\n";
         }
-               
-
         returnText = returnText + att;
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         OMElement method = fac.createOMElement("createVirtualMachineResponse", omNs);
         method.addChild(fac.createOMText(returnText));
-
         return method;
     }
 
-    boolean createVirtualMachine(String phyServer, String vmName, String vmRAM, String vmIP) throws LibvirtException{
+    /**
+     * 
+     * @param phyServer
+     * @param vmName
+     * @param vmRAM
+     * @param vmIP
+     * @return
+     * @throws LibvirtException
+     */
+    private boolean createVirtualMachine(String phyServer, String vmName, String vmRAM, String vmIP) throws LibvirtException{
         Connect Conn = new Connect("xen+ssh://root@" + phyServer + "/");
         Domain newdomain = Conn.domainCreateXML(
             "<domain type='xen'>" +
@@ -179,16 +182,9 @@ public class VMServer {
      * @param element part of a xml with the parameters for the operation
      * @return an OMElement with the result of the operation
      */
-
     public OMElement migrateVirtualMachine(OMElement element){
         element.build();
         element.detach();
-        System.err.println("MigrateVirtualMachine");
-        Logger.getLogger(VMServer.class.getName()).log(Level.ALL, "MigrageVirtualMachine");
-
-
-        System.out.println("migrateVM message: "+element.toString());
-
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
         ele.clear();
@@ -198,7 +194,6 @@ public class VMServer {
         int live = 0;
         while(it.hasNext()){
             ele.add((OMElement) it.next());
-            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
             if(ele.lastElement().getLocalName().equals("sourcePhyServer")){
                 sourcePhyServer = ele.lastElement().getText();
                 att = att + "sourcePhyServer: "+sourcePhyServer+"\n";
@@ -236,7 +231,7 @@ public class VMServer {
         return method;
     }
 
-    boolean migrateVirtualMachine(String sourcePhyServer, String destPhyServer, String vmName, int live) throws LibvirtException{
+    private boolean migrateVirtualMachine(String sourcePhyServer, String destPhyServer, String vmName, int live) throws LibvirtException{
         Connect sConn = new Connect("xen+ssh://root@"+sourcePhyServer+"/");
         Domain domain = sConn.domainLookupByName(vmName);
         Connect dConn = new Connect("xen+ssh://root@"+destPhyServer+"/");
@@ -255,15 +250,12 @@ public class VMServer {
     public OMElement getVirtualMachineStatus(OMElement element){
         element.build();
         element.detach();
-        System.out.println("getVirtualMachineStatus message: "+element.toString());
-        Logger.getLogger(VMServer.class.getName()).log(Level.FINE, "DEBUG----DEBUG");
         Iterator it = element.getChildElements();
         Vector <OMElement> ele = new Vector();
         String phyServer = null, vmName = null;
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
         OMElement retElement = fac.createOMElement("getVirtualMachineStatusResponse", omNs);
-
         while(it.hasNext()){
             ele.add((OMElement) it.next());
             //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
@@ -462,7 +454,6 @@ public class VMServer {
 
         while(it.hasNext()){
             ele.add((OMElement) it.next());
-            //att = att+ele.lastElement().getLocalName()+": "+ele.lastElement().getText()+"\n";
             if(ele.lastElement().getLocalName().equals("phyServer")){
                 phyServer = ele.lastElement().getText();
                 //att = "phyServer: "+phyServer+"\n";
@@ -534,8 +525,6 @@ public class VMServer {
         element.detach(); 
         System.out.println("createVirtualNetwork message: "+element.toString());
 
-        String vmRAM = "65536";
-
         //<vsm:createVNet xmlns:vsm="http://vmserver/xsd"><vsm:nodeCount>3</vsm:nodeCount>
         //<vsm:phyServer>phyS_1</vsm:phyServer><vsm:phyServer>phyS_2</vsm:phyServer>
         //<vsm:phyServer>phyS_3</vsm:phyServer><vsm:VMName>vm_1</vsm:VMName>
@@ -550,6 +539,8 @@ public class VMServer {
         int nodeCount=0;
         Vector<String> phyServerList = new Vector();
         Vector<String> vmNameList = new Vector();
+        Vector<String> IPList = new Vector();
+        Vector<String> RAMszList = new Vector();
         while(it.hasNext()){
             ele.add((OMElement) it.next());
             if(ele.lastElement().getLocalName().equals("nodeCount")){
@@ -564,11 +555,19 @@ public class VMServer {
                 vmNameList.add(ele.lastElement().getText());
                 att = att + "vmNameList: "+vmNameList.lastElement()+"\n";
             }
+            if(ele.lastElement().getLocalName().equals("vmIP")){
+                IPList.add(ele.lastElement().getText());
+                att = att + "IPList: "+IPList.lastElement()+"\n";
+            }
+            if(ele.lastElement().getLocalName().equals("vmRAM")){
+                RAMszList.add(ele.lastElement().getText());
+                att = att + "vRAMszList: "+RAMszList.lastElement()+"\n";
+            }
         }
         int i;
         for(i=0;i<nodeCount;i++){
             try {
-                if (!createVirtualMachine(phyServerList.elementAt(i), vmNameList.elementAt(i), vmRAM, "")) { //TODO: autogenerate IPs
+                if (!createVirtualMachine(phyServerList.elementAt(i), vmNameList.elementAt(i), RAMszList.elementAt(i), IPList.elementAt(i))) { //TODO: autogenerate IPs
                     returnText = "ERROR - Virtual Network could not be created\nAttributes:\n";
                 }
             } catch (LibvirtException ex) {
