@@ -578,7 +578,12 @@ public class VMServer {
         //virtual machines created
         //TODO: Configurar rede virtual
 
-        return element;//throw new UnsupportedOperationException("Not yet implemented");
+        returnText = returnText + att;
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement method = fac.createOMElement("createVirtualNetworkResponse", omNs);
+        method.addChild(fac.createOMText(returnText));
+        return method;
     }
 
     /*Method to save the vm on the database (text file)*/
