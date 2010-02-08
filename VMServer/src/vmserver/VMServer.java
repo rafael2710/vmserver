@@ -40,6 +40,7 @@ public class VMServer {
     private String PREFIX = "";
     private String DATABASE = "data.txt";
     private String PS_TOKEN = "|";
+    FileOutputStream fstream;
 //    private String VM_TOKEN = ";";
 //    private String VM_PROPERTIES_TOKEN = ",";
     /* File Format
@@ -49,7 +50,6 @@ public class VMServer {
 
 
     public VMServer(){
-        FileOutputStream fstream;
         try {
             fstream = new FileOutputStream(DATABASE,true);
         } catch (FileNotFoundException ex) {
@@ -83,6 +83,7 @@ public class VMServer {
         Vector <OMElement> ele = new Vector();
         ele.clear();
         String returnText = "SUCESS - Virtual Machine created\nAttributes:\n";
+        String result = "SUCESS";
         String att = "";
         String phyServer="", vmName="", vmRAM ="", vmIP="";
         while(it.hasNext()){
@@ -108,16 +109,23 @@ public class VMServer {
         try {
             if(!createVirtualMachine(phyServer, vmName, vmRAM, vmIP)){
                 returnText = "ERROR - The Domain could not be created - \nAttributes:\n";
+                result = "ERROR";
             }
         } catch (LibvirtException ex) {
             returnText = "ERROR - The Domain could not be created - Exception: "+ex.getMessage()+"\nAttributes:\n";
+            result = "ERROR";
         }
         returnText = returnText + att;
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
-        OMElement method = fac.createOMElement("createVirtualMachineResponse", omNs);
-        method.addChild(fac.createOMText(returnText));
-        return method;
+        OMElement retElement = fac.createOMElement("createVirtualMachineResponse", omNs);
+        
+        OMElement value = fac.createOMElement("result", omNs);
+        value.addChild(fac.createOMText(value, result));
+
+        retElement.addChild(value);
+        //method.addChild(fac.createOMText(returnText));
+        return retElement;
     }
 
     /**
@@ -522,8 +530,7 @@ public class VMServer {
 
     public OMElement createVirtualNetwork(OMElement element){
         element.build();
-        element.detach(); 
-        System.out.println("createVirtualNetwork message: "+element.toString());
+        element.detach();
 
         //<vsm:createVNet xmlns:vsm="http://vmserver/xsd"><vsm:nodeCount>3</vsm:nodeCount>
         //<vsm:phyServer>phyS_1</vsm:phyServer><vsm:phyServer>phyS_2</vsm:phyServer>
@@ -581,10 +588,59 @@ public class VMServer {
         returnText = returnText + att;
         OMFactory fac = OMAbstractFactory.getOMFactory();
         OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
-        OMElement method = fac.createOMElement("createVirtualNetworkResponse", omNs);
-        method.addChild(fac.createOMText(returnText));
-        return method;
+        OMElement retElement = fac.createOMElement("createVirtualNetworkResponse", omNs);
+        retElement.addChild(fac.createOMText(returnText));
+        return retElement;
     }
+
+    public OMElement registryNode(OMElement element){
+        element.build();
+        element.detach();
+        Iterator it = element.getChildElements();
+        Iterator it2 = null;
+        Vector <OMElement> ele = new Vector();
+        OMElement buf = null;
+        ele.clear();
+        
+        int nodeCount=0;
+        Vector<PhysicalServer> newNodes = new Vector();
+
+        while(it.hasNext()){
+            ele.add((OMElement) it.next());
+            if(ele.lastElement().getLocalName().equals("Node")){
+                it2 = ele.lastElement().getChildElements();
+                newNodes.add(new PhysicalServer());
+                while(it2.hasNext()){
+                    buf=((OMElement) it2.next());
+                    if(buf.getLocalName().equals("NodePK")){
+                        newNodes.lastElement().setPK(buf.getText());
+                    }
+                    if(buf.getLocalName().equals("IP")){
+                        newNodes.lastElement().setIP(buf.getText());
+                    }
+                    if(buf.getLocalName().equals("Memory")){
+                        newNodes.lastElement().setRAMSize(buf.getText());
+                    }
+                }
+                nodeCount++;
+            }
+        }
+        for(int i=0;i<nodeCount;i++){
+            if(getPhysicalServerByIP(newNodes.elementAt(i).getIP())){
+                //TODO: colocar alguma forma de retorno, informando que servidor já está registrado
+            }
+        }
+        for(int i=0;i<nodeCount;i++){
+            //TODO: escrever nós no arquivo
+        }
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public OMElement getRegisteredNodes(OMElement element){
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+
 
     /*Method to save the vm on the database (text file)*/
 //    private void SaveVM(VirtualMachine vm){
@@ -604,6 +660,10 @@ public class VMServer {
         } catch (Exception ex) {
             Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private boolean getPhysicalServerByIP(String IP){
+        throw new UnsupportedOperationException("Not yet implemented");
     }
     
     private PhysicalServer loadPhysicalServer(String psName){

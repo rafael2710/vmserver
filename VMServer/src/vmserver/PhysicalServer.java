@@ -9,12 +9,22 @@ import java.util.Vector;
 public class PhysicalServer extends Computer{
     // Fields
     private Vector<VirtualMachine> vmList;
+    private String pk;
 
     PhysicalServer(){
         vmList = new Vector<VirtualMachine>();
+        pk = null;
     }
 
     // Methods
+    public void setPK(String pk){
+        this.pk = pk;
+    }
+
+    public String getPK(){
+        return pk;
+    }
+
     public Vector<VirtualMachine> getVirtualMachineList(){
         return vmList;
     }
