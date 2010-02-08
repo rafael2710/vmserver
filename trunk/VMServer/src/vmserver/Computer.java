@@ -13,7 +13,7 @@ public class Computer {
     // Fields
     private String name;
     private String IP;
-    private int RAMSize;
+    private String RAMSize;
     private int hardDiskSize;
 
 
@@ -52,7 +52,7 @@ public class Computer {
         method.addChild(value);
 
         value = fac.createOMElement("RAMSize", omNs);
-        value.addChild(fac.createOMText(value, Integer.toString(RAMSize)));
+        value.addChild(fac.createOMText(value, RAMSize));
         method.addChild(value);
 
         value = fac.createOMElement("hardDiskSize", omNs);
@@ -93,14 +93,14 @@ public class Computer {
      * set the RAM memory size for the computer
      * @param RAMSize the RAM memory new size
      */
-    public void setRAMSize(int RAMSize){
+    public void setRAMSize(String RAMSize){
         this.RAMSize = RAMSize;
     }
     /**
      * get the RAM memory size of the computer
      * @return the RAM memory size
      */
-    public int getRAMSize(){
+    public String getRAMSize(){
         return RAMSize;
     }
     /**
