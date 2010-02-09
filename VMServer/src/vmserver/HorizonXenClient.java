@@ -16,7 +16,7 @@ import org.apache.axis2.client.ServiceClient;
  * @author Rafael
  */
 
-public class VMClient {
+public class HorizonXenClient {
 
     private String URI = "http://vmserver/xsd";
     //private String URI = "http://meier.gta.ufrj.br:8080/axis2/services/VMServer/xsd";
@@ -297,49 +297,80 @@ public class VMClient {
         return method;
     }
 
+    public  OMElement getRegisteredNodesPayload(){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("getRegisteredNodes", omNs);
+        return method;
+    }
+
+    public  OMElement registerNodesPayload(Vector<PhysicalServer> Nodes){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("registerNodes", omNs);
+
+        for(int i = 0;i<Nodes.size();i++){
+            OMElement value = fac.createOMElement("Node", omNs);
+            OMElement  value2 = fac.createOMElement("NodeName", omNs);
+            value2.addChild(fac.createOMText(Nodes.elementAt(i).getName()));
+            value.addChild(value2);
+            value2 = fac.createOMElement("NodePK", omNs);
+            value2.addChild(fac.createOMText(Nodes.elementAt(i).getPK()));
+            value.addChild(value2);
+            method.addChild(value);
+        }
+        return method;
+    }
+
     
 
 
     public static void main(String[] args) {
         try {
-            VMClient vmc = new VMClient();
+            HorizonXenClient hxc = new HorizonXenClient();
             // set options to send message
             Options options = new Options();
-            options.setTo(vmc.targetEPR);
+            options.setTo(hxc.targetEPR);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             // create client
             ServiceClient sender = new ServiceClient();
             sender.setOptions(options);
 
             // creating message payload
-            OMElement messagePayload = vmc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
+            OMElement messagePayload = hxc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
             // send message and wait for the server response
             OMElement result = sender.sendReceive(messagePayload);
             // print some output
             System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
 
- //           messagePayload = vmc.migrateVirtualMachinePayload("engenhao","inga","test_vmserver","true");
+ //           messagePayload = hxc.migrateVirtualMachinePayload("engenhao","inga","test_vmserver","true");
    ///         result = sender.sendReceive(messagePayload);
  //           System.out.println("result: "+result.toString());
 
 
-//            messagePayload = vmc.getPhysicalServerStatusPayload("inga");
+//            messagePayload = hxc.getPhysicalServerStatusPayload("inga");
   //          result = sender.sendReceive(messagePayload);
     //        System.out.println("result: "+result.toString());
 //
-//            messagePayload = vmc.shutdownPhysicalServerPayload("phyS");
+//            messagePayload = hxc.shutdownPhysicalServerPayload("phyS");
 //            result = sender.sendReceive(messagePayload);
 //            System.out.println("result: "+result.toString());
 //
-  //          messagePayload = vmc.getVirtualMachineStatusPayload("inga", "test_vmserver");
+  //          messagePayload = hxc.getVirtualMachineStatusPayload("inga", "test_vmserver");
 //            result = sender.sendReceive(messagePayload);
 //            System.out.println("result: "+result.toString());
 //
-//            messagePayload = vmc.shutdownVirtualMachinePayload("phy", "vmname");
+//            messagePayload = hxc.shutdownVirtualMachinePayload("phy", "vmname");
 //            result = sender.sendReceive(messagePayload);
 //            System.out.println("result: "+result.toString());
 //
-//            messagePayload = vmc.destroyVirtualMachinePayload("phy", "vmname");
+//            messagePayload = hxc.destroyVirtualMachinePayload("phy", "vmname");
 //            result = sender.sendReceive(messagePayload);
 //            System.out.println("result: "+result.toString());
 //
@@ -351,7 +382,7 @@ public class VMClient {
 //            VMNames.add("vm_1");
 //            VMNames.add("vm_2");
 //            VMNames.add("vm_3");
-//            messagePayload = vmc.createVirtualNetworkPayload(phyServers, VMNames);
+//            messagePayload = hxc.createVirtualNetworkPayload(phyServers, VMNames);
 //            result = sender.sendReceive(messagePayload);
 //            System.out.println("result: "+result.toString());
 
