@@ -20,20 +20,20 @@ public class client {
      */
     public static void main(String[] args) {
         try {
-            VMClient vmc = new VMClient();
+            HorizonXenClient hxc = new HorizonXenClient();
             // set options to send message
             Options options = new Options();
 //            vmc.targetEPR.setAddress("http://meier:8080/axis2/services/VMServer");
 //            vmc.targetEPR.setAddress("http://192.168.0.130:8080/axis2/services/VMServer");
-            vmc.targetEPR.setAddress("http://localhost:8080/axis2/services/VMServer");
-            options.setTo(vmc.targetEPR);
+            hxc.targetEPR.setAddress("http://localhost:8080/axis2/services/VMServer");
+            options.setTo(hxc.targetEPR);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             // create client
             ServiceClient sender = new ServiceClient();
             sender.setOptions(options);
 
             // creating message payload
-            OMElement messagePayload = vmc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
+            OMElement messagePayload = hxc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
 
 //            messagePayload = vmc.sanityTestPayload("a simple test string");
             System.out.println("DEBUG: "+messagePayload.toString());

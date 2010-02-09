@@ -11,7 +11,7 @@ public class PhysicalServer extends Computer{
     private Vector<VirtualMachine> vmList;
     private String pk;
 
-    PhysicalServer(){
+    public PhysicalServer(){
         vmList = new Vector<VirtualMachine>();
         pk = null;
     }

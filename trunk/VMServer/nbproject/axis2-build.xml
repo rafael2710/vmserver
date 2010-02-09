@@ -8,7 +8,7 @@
     <target name="java2wsdl-init" depends="init">
         <mkdir dir="${basedir}/xml-resources/axis2/META-INF"/>
         <taskdef name="java2wsdl" classname="org.apache.ws.java2wsdl.Java2WSDLTask">
-            <classpath path="${libs.axis2.classpath}"/>
+            <classpath path="${libs.axis2.classpath};/usr/share/tomcat6/lib/libvirt-0.4.0.jar"/>
         </taskdef>
     </target>
     <target name="java2wsdl-check-VMServer" depends="java2wsdl-init">

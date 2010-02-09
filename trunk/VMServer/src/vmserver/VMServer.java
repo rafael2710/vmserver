@@ -4,9 +4,13 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Iterator;
@@ -38,9 +42,10 @@ public class VMServer {
     private String URI = "http://vmserver/xsd";
     //private String PREFIX = "hxpm";//horizon xen prototype message
     private String PREFIX = "";
-    private String DATABASE = "data.txt";
+    private String DATABASE = "/home/vmserver/data.txt";
     private String PS_TOKEN = "|";
-    FileOutputStream fstream;
+    FileWriter fwriter;
+    FileReader freader;
 //    private String VM_TOKEN = ";";
 //    private String VM_PROPERTIES_TOKEN = ",";
     /* File Format
@@ -49,13 +54,6 @@ public class VMServer {
      */
 
 
-    public VMServer(){
-        try {
-            fstream = new FileOutputStream(DATABASE,true);
-        } catch (FileNotFoundException ex) {
-            System.err.println("The file could not be opened or created");
-        }
-    }
 
     /**
      * A simple sanity test for the server of virutal machines
@@ -593,7 +591,7 @@ public class VMServer {
         return retElement;
     }
 
-    public OMElement registryNode(OMElement element){
+    public OMElement registerNodes(OMElement element){
         element.build();
         element.detach();
         Iterator it = element.getChildElements();
@@ -601,6 +599,7 @@ public class VMServer {
         Vector <OMElement> ele = new Vector();
         OMElement buf = null;
         ele.clear();
+        String returnText = "SUCESS - Nodes registered\n";
         
         int nodeCount=0;
         Vector<PhysicalServer> newNodes = new Vector();
@@ -627,17 +626,87 @@ public class VMServer {
         }
         for(int i=0;i<nodeCount;i++){
             if(getPhysicalServerByIP(newNodes.elementAt(i).getIP())){
-                //TODO: colocar alguma forma de retorno, informando que servidor já está registrado
+                returnText = "ERROR: Node "+newNodes.elementAt(i).getName()+"already registered";
+                OMFactory fac = OMAbstractFactory.getOMFactory();
+                OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+                OMElement retElement = fac.createOMElement("registryNodeResponse", omNs);
+                retElement.addChild(fac.createOMText("ERROR"));
+                return retElement;
             }
         }
         for(int i=0;i<nodeCount;i++){
-            //TODO: escrever nós no arquivo
+            try {
+                DataOutputStream out = new DataOutputStream(new FileOutputStream(DATABASE, true));
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(out));
+                //fwriter = new FileWriter(DATABASE, true);
+                bw.write(newNodes.elementAt(i).getName()+PS_TOKEN+newNodes.elementAt(i).getPK()+"\n");
+                //fwriter.flush();
+                //fwriter.close();
+                bw.close();
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+                OMFactory fac = OMAbstractFactory.getOMFactory();
+                OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+                OMElement retElement = fac.createOMElement("registryNodeResponse", omNs);
+                retElement.addChild(fac.createOMText("ERROR"));
+                return retElement;
+            }
         }
-        throw new UnsupportedOperationException("Not yet implemented");
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement retElement = fac.createOMElement("registryNodeResponse", omNs);
+        retElement.addChild(fac.createOMText(returnText));
+        return retElement;
     }
 
     public OMElement getRegisteredNodes(OMElement element){
-        throw new UnsupportedOperationException("Not yet implemented");
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        OMElement retElement = fac.createOMElement("getRegisteredNodesResponse", omNs);
+        String returnText = "SUCESS";
+        Vector<PhysicalServer> newNodes = new Vector();
+        try {
+            DataInputStream in = new DataInputStream(new FileInputStream(DATABASE));
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            while(true){
+                String line = br.readLine();
+                if(line==null)
+                    break;
+                PhysicalServer buf = new PhysicalServer();
+                StringTokenizer stok = new StringTokenizer(line, PS_TOKEN);
+                buf.setName(stok.nextToken());
+                buf.setPK(stok.nextToken());
+                newNodes.add(buf);
+            }
+
+            in.close();
+        } catch (Exception ex) {
+            Logger.getLogger(VMServer.class.getName()).log(Level.SEVERE, null, ex);
+            returnText = "ERROR";
+            OMElement value = fac.createOMElement("result", omNs);
+            value.addChild(fac.createOMText(value, "Error"));
+            retElement.addChild(value);
+            value = fac.createOMElement("Exception", omNs);
+            value.addChild(fac.createOMText(value, ex.getMessage()));
+            retElement.addChild(value);
+            return retElement;
+        }
+        OMElement value = fac.createOMElement("result", omNs);
+        value.addChild(fac.createOMText(value, "Sucess"));
+        retElement.addChild(value);
+        
+        for(int i = 0;i<newNodes.size();i++){
+            value = fac.createOMElement("Node", omNs);
+            OMElement  value2 = fac.createOMElement("NodeName", omNs);
+            value2.addChild(fac.createOMText(newNodes.elementAt(i).getName()));
+            value.addChild(value2);
+            value2 = fac.createOMElement("NodePK", omNs);
+            value2.addChild(fac.createOMText(newNodes.elementAt(i).getPK()));
+            value.addChild(value2);
+            retElement.addChild(value);
+        }
+        return retElement;
     }
 
 
