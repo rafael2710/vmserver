@@ -20,6 +20,8 @@ public class client {
      */
     public static void main(String[] args) {
         try {
+
+
             HorizonXenClient hxc = new HorizonXenClient();
             // set options to send message
             Options options = new Options();
@@ -31,16 +33,43 @@ public class client {
             // create client
             ServiceClient sender = new ServiceClient();
             sender.setOptions(options);
+            OMElement messagePayload = null;
+
+            //
+            // o primeiro elemento em args deve ser o serviço requerido.
+            //TODO: verificar comprimento de args (>0)
+            if(args[0].equals("createVirtualMachine")){//TODO: Verificar o valor de args[i]
+                String phyServer = args[1];
+                String vmName = args[2];
+                String vmIP = args[3];
+                String vmRAM = args[4];
+                String vmDiskSize = args[5];
+
+                messagePayload = hxc.createVirtualMachinePayload(phyServer, vmName, vmIP, vmRAM, vmDiskSize);
+            }
+            else if(args[0].equals("getRegisteredNodes")){
+                messagePayload = hxc.getRegisteredNodesPayload();
+            }
+            else if(args[0].equals("createVirtualNetwork")){
+                throw new UnsupportedOperationException("Not yet implemented");
+            }
+            else if(args[0].equals("destroyVirtualMachine")){
+                throw new UnsupportedOperationException("Not yet implemented");
+            }
+            else if(args[0].equals("registerNodes")){
+                throw new UnsupportedOperationException("Not yet implemented");
+            }
+            //TODO: implementar para outros serviços
 
             // creating message payload
-            OMElement messagePayload = hxc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
+            //OMElement messagePayload = hxc.createVirtualMachinePayload("phy","vmname","10.10.0.1","500","5");
 
 //            messagePayload = vmc.sanityTestPayload("a simple test string");
-            System.out.println("DEBUG: "+messagePayload.toString());
+            //System.out.println("DEBUG: "+messagePayload.toString());
             // send message and wait for the server response
             OMElement result = sender.sendReceive(messagePayload);
             // print some output
-            System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
+            //System.out.println("result: "+result.getFirstElement().getFirstElement().getText());
 
 
  //           messagePayload = vmc.migrateVirtualMachinePayload("engenhao","inga","test_vmserver","true");
