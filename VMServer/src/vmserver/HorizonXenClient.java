@@ -307,6 +307,16 @@ public class HorizonXenClient {
         return method;
     }
 
+    public OMElement topologyDiscoverPayload(){
+        OMFactory fac = OMAbstractFactory.getOMFactory();
+
+        // Set the namespace of the messages
+        OMNamespace omNs = fac.createOMNamespace(URI, PREFIX);
+        // Set the required operation
+        OMElement method = fac.createOMElement("topologyDiscover", omNs);
+        return method;
+    }
+
     public  OMElement registerNodesPayload(Vector<PhysicalServer> Nodes){
         OMFactory fac = OMAbstractFactory.getOMFactory();
 

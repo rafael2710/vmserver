@@ -710,6 +710,11 @@ public class VMServer {
     }
 
 
+    public OMElement topologyDiscover(OMElement element){
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+
 
     /*Method to save the vm on the database (text file)*/
 //    private void SaveVM(VirtualMachine vm){
