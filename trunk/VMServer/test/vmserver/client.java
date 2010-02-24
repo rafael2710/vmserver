@@ -21,13 +21,15 @@ public class client {
     public static void main(String[] args) {
         try {
 
+            // chamada: java -jar client.jar [VM_SERVER_IP] [SERVICE] [PARAM 1] [PARAM 2] ... [PARAM N]
+
 
             HorizonXenClient hxc = new HorizonXenClient();
             // set options to send message
             Options options = new Options();
 //            vmc.targetEPR.setAddress("http://meier:8080/axis2/services/VMServer");
 //            vmc.targetEPR.setAddress("http://192.168.0.130:8080/axis2/services/VMServer");
-            hxc.targetEPR.setAddress("http://localhost:8080/axis2/services/VMServer");
+            hxc.targetEPR.setAddress("http://"+args[0]+":8080/axis2/services/VMServer");
             options.setTo(hxc.targetEPR);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             // create client
@@ -38,25 +40,28 @@ public class client {
             //
             // o primeiro elemento em args deve ser o serviço requerido.
             //TODO: verificar comprimento de args (>0)
-            if(args[0].equals("createVirtualMachine")){//TODO: Verificar o valor de args[i]
-                String phyServer = args[1];
-                String vmName = args[2];
-                String vmIP = args[3];
-                String vmRAM = args[4];
-                String vmDiskSize = args[5];
+            if(args[1].equals("createVirtualMachine")){//TODO: Verificar o valor de args[i]
+                String phyServer = args[2];
+                String vmName = args[3];
+                String vmIP = args[4];
+                String vmRAM = args[5];
+                String vmDiskSize = args[6];
 
                 messagePayload = hxc.createVirtualMachinePayload(phyServer, vmName, vmIP, vmRAM, vmDiskSize);
             }
-            else if(args[0].equals("getRegisteredNodes")){
+            else if(args[1].equals("getRegisteredNodes")){
                 messagePayload = hxc.getRegisteredNodesPayload();
             }
-            else if(args[0].equals("createVirtualNetwork")){
+            else if(args[1].equals("createVirtualNetwork")){
                 throw new UnsupportedOperationException("Not yet implemented");
             }
-            else if(args[0].equals("destroyVirtualMachine")){
+            else if(args[1].equals("destroyVirtualMachine")){
                 throw new UnsupportedOperationException("Not yet implemented");
             }
-            else if(args[0].equals("registerNodes")){
+            else if(args[1].equals("registerNodes")){
+                throw new UnsupportedOperationException("Not yet implemented");
+            }
+            else if(args[1].equals("topologyDiscover")){
                 throw new UnsupportedOperationException("Not yet implemented");
             }
             //TODO: implementar para outros serviços
